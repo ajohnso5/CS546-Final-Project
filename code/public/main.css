@@ -1,0 +1,92 @@
+body {
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    margin-top: 100px;
+}
+
+/*
+========================SIGNIN=========================
+*/
+
+#main-page {
+    background-image: url('../resources/fish_img1.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#login_container {
+    border-radius: 10px;
+    background-color: #f5eded;
+    margin: 30vh auto;
+    min-width: 500px;
+    width: 60vw;
+    padding: 30px 10px 50px 10px;
+    box-shadow: 5px 10px rgba(0,0,0,0.2);
+}
+
+#login_container input {
+    display: block;
+    margin: 10px auto;
+    border: none;
+    border-bottom: 1px solid black;
+    background-color: rgba(0,0,0,0);
+    font-size: 20px;
+    padding: 5px;
+}
+
+#login_container input:focus {
+    border: none;
+    border-bottom: 1px solid black;
+    background-color: rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+#login_container button {
+    display: block;
+    width: 50px;
+    height: 30px;
+    margin: 10px auto;
+}
+
+#change-screen:hover {
+    cursor: pointer;
+    color: darkslategrey;
+    transition: 0.3s;
+}
+
+/*
+======================NAV=====================
+*/
+nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    background-color: #f8f8f8;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav li {
+    display: inline-block;
+    margin: 10px;
+}
+
+nav a {
+    font-style: none;
+    text-decoration: none;
+    color: darkslategrey;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    font-size: 20px;
+}
+
+.selected {
+    font-size: 20px;
+}
