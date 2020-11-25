@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head> 
+	<title> Website </title>
+</head>
+
+<body> 
+	<a href="/" action> Back to Homepage </a>
+	<header>
+		<h1> Login </h1>
+	
+	{{#if error}}
+	<h2 class ="error"> {{{error}}} </h2>
+	{{else}}
+	{{/if}}
+	</header>
+
+	<form action ="/createAccount" method = "POST" id ="createAccount-form" >
+		<label for="firstname" class="labeln"> Enter First Name: </label>
+			<input type = "text" id = "firstname" name="firstname">
+			<br>
+		<label for="lastname" class="labell"> Enter Last Name: </label>
+			<input type = "text" id = "lastname" name = "lastname">
+			<br>
+		<label for="username" class="labelu"> Enter Username: </label>
+			<input type = "text" id= "username" name="username">
+			<br>
+		<label for="password" class= "labelp"> Enter Password: </label>
+			<input type = "text" id= "password" name="password">
+			<br>
+			<br>
+		<button type = "submit" class="button"> Create Account </button>
+		
+	</form>
+
+
+
+</body>
+
+</html>
