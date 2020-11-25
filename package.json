@@ -1,0 +1,15 @@
+{
+  "name": "cs546-final-project",
+  "version": "1.0.0",
+  "description": "Fishing Tool",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-rbyrne30:ajohnso5/CS546-Final-Project.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
