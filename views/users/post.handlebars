@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head> 
+	<title> Website </title>
+</head>
+
+<body> 
+	<a href="/" action> Back to Homepage </a>
+	<header>
+		<h1> Post a Picture! </h1>
+	
+	{{#if error}}
+	<h2 class ="error"> {{{error}}} </h2>
+	{{else}}
+	{{/if}}
+	</header>
+
+	<form action ="/post" method = "POST" id ="post-form" >
+		<label for="picture" class="label"> Upload a picture! </label>
+			<input type = "file" id = "picture" name="picture">
+			<br>
+		<label for="caption" class="label"> Enter a caption: </label>
+			<input type = "text" id = "caption" name = "caption">
+			<br>
+			<br>
+		<button type = "submit" class="button"> Submit Post! </button>
+		
+	</form>
+
+
+
+</body>
+
+</html>
