@@ -42,6 +42,18 @@ function stringifyObject(o) {
     return o;
 }
 
+async function checkNotExist(collection, params, objName) {
+    const col = await collection();
+    const result = await col.findOne({params});
+    if (result != null) throw `${objName} already exists`;
+}
+
+async function checkExist(collection, params, objName) {
+    const col = await collection();
+    const result = await col.findOne({params});
+    if (result == null) throw `${objName} does not exist`;
+}
+
 
 module.exports = {
     checkParams,
@@ -49,5 +61,7 @@ module.exports = {
     checkBool,
     checkStringIsObjectId,
     toObjectId,
-    stringifyObject
+    stringifyObject,
+    checkNotExist,
+    checkExist
 }

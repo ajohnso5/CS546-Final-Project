@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const NotFoundError = require('../errors/NotFoundError');
 const utils = require('./_utils');
 const mongoCollections = require('../config/mongoCollections');
-const { get } = require('../../../Labs/10/routes/login');
+const helper = require('./_helper');
 const users = mongoCollections.users;
 
 
@@ -35,35 +35,20 @@ async function create(username, password, isAuthorized) {
     utils.checkParams(utils.checkBool, {isAuthorized});
     checkUserNameNotExist(username);
     checkPassword(password);
-    const usersCollection = await users();
-    const result = await usersCollection.insertOne({
-        isAuthorized: isAuthorized,
-        username: username,
-        passwordHash: await hashpw(password)
-    });
-    if (result.insertedCount === 0) throw "Could not register new user";
-    return get(result.insertedId.toString())
+    const pwHash = await hashpw(password);
+    return await helper.create(users, {isAuthorized, username, password: pwHash}, "User");
 }
 
 async function remove(id) {
-    utils.checkParams(utils.checkStringIsObjectId, {id});
-    const usersCollection = await users();
-    const result = await usersCollection.deleteOne({_id: utils.toObjectId(id)});
-    if (result.deletedCount === 0) throw "Could not delete user";
-    return id;
+    return await helper.remove(users, id, "User");
 }
 
 async function getById(id) {
-    utils.checkParams(utils.checkStringIsObjectId, {id});
-    const usersCollection = await users();
-    const result = await usersCollection.findOne({_id: utils.toObjectId(id)});
-    if (result == null) throw new NotFoundError("No user found for given id");
-    return utils.stringifyObject(result);
+    return await helper.getById(users, id, "User");
 }
 
 async function getAll() {
-    const usersCollection = await users();
-    return await usersCollection.find({});
+    return await helper.getAll(users);
 }
 
 async function update(id, model) {
@@ -83,6 +68,7 @@ async function update(id, model) {
         checkPassword(model.password);
         updates.passwordHash = await hashpw(model.password);
     }
+    return await helper.update(users, id, updates, "User");
 }
 
 
