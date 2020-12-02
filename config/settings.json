@@ -2,5 +2,9 @@
     "mongoConfig": {
         "serverUrl": "mongodb://localhost:27017/",
         "database": "CS546-Final_Project"
+    },
+    "weatherApi": {
+        "key": "4f94be4051b640e1aea235857200112",
+        "url": "http://api.weatherapi.com/v1/"
     }
 }

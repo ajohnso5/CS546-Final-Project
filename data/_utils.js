@@ -14,6 +14,13 @@ function checkString(paramName, paramValue) {
     if (paramValue == null || paramValue == "") throw `${paramName} cannot be empty`;
 }
 
+function checkStringArray(paramName, paramValue) {
+    if (!Array.isArray(paramValue)) throw `${paramName} is not an array`;
+    for (let i=0; i<paramValue.length; i++) {
+        checkString(`${paramName}[${i}]`, paramValue[i]);
+    }
+}
+
 function checkBool(paramName, paramValue) {
     if (typeof paramValue != "boolean") throw `${paramName} is not a boolean`;
 }
@@ -21,6 +28,14 @@ function checkBool(paramName, paramValue) {
 function checkStringIsObjectId(paramName, paramValue) {
     this.checkString(paramName, paramValue);
     if (!ObjectId.isValid(paramValue)) throw `${paramValue} is not a valid ObjectId`;
+}
+
+function checkFloat(paramName, paramValue) {
+    if (isNaN(paramValue)) throw `${paramName} is not a number`;
+}
+
+function checkDateTime(paramName, paramValue) {
+    if (isNaN(Date.parse(paramValue))) throw `${paramName} is not a valid datetime object`;
 }
 
 
@@ -63,5 +78,8 @@ module.exports = {
     toObjectId,
     stringifyObject,
     checkNotExist,
-    checkExist
+    checkExist,
+    checkStringArray,
+    checkFloat,
+    checkDateTime
 }
