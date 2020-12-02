@@ -1,21 +1,10 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" href="../public/main.css">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
-        <title>FishFinder</title>
-    </head>
-<body id="main-page">
-    <main>
-        
-    
-        <div id="login_container">
-            {{#if error}}
-    <h1> {{{error}}} </h2>
-    {{else}}
-    {{/if}}
-            <form action="/login" method="POST" id ="myForm">
+<div id="main-page">
+    <div id="login_container">
+        {{#if error}}
+        <h1 id="error"> {{{error}}} </h2>
+            {{else}}
+            {{/if}}
+            <form action="/login" method="POST" id="myForm">
                 <h1>FishFinder</h1>
                 <h2 id="subtitle">Login</h2>
                 <input type="text" id="username" name="username" placeholder="Username">
@@ -24,8 +13,6 @@
                 <button type="submit">Go!</button>
                 <span onclick="changeScreen()" id="change-screen">Don't have an account? Click here!</span>
             </form>
-        </div>
-    </main>
-    <script type="text/javascript" src="../public/login.js"></script>
-</body>
-</html>
+    </div>
+    <script type="text/javascript" src="/public/login.js"></script>
+</div>

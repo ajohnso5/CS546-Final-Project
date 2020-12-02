@@ -1,11 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const session = require('express-session');
-const bcrypt = require('bcrypt');
-const users = require("../database")
-
-
-
 
 //post on the forum
 router.get('/post', async (req,res)=>{

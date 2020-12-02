@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const session = require('express-session');
-const bcrypt = require('bcrypt');
-const users = require("../database")
+const bcrypt = require('bcryptjs');
+//const users = require("../database")
 
 async function findUser(username) {
-  for(x in users){
-      if (users[x]["username"].toLowerCase() == username.toLowerCase()){
-        return users[x]
-      }
-  }
+  // for(x in users){
+  //     if (users[x]["username"].toLowerCase() == username.toLowerCase()){
+  //       return users[x]
+  //     }
+  // }
 
   return 0;
 }

@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const session = require('express-session');
 const configRoutes = require('./routes');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 app.use(express.json());
 
 
@@ -30,19 +30,17 @@ app.use('/', (req,res,next) => {
     else{
        next();
     }
-
-   
 });
 
-app.use('/dashboard', (req, res, next) => {
-  if (!req.session.user) {
-    req.session.error = 'You are not logged in';
-    return res.redirect('/');
-  } else {
-    next();
-  }
+// app.use('/dashboard', (req, res, next) => {
+//   if (!req.session.user) {
+//     req.session.error = 'You are not logged in';
+//     return res.redirect('/');
+//   } else {
+//     next();
+//   }
 
-});
+// });
 
 
 configRoutes(app);

@@ -1,0 +1,28 @@
+<nav>
+    <ul>
+        <li><a href="/dashboard/journal" action>Journal</a></li>
+        <li><a href="/dashboard/data" action>Data</a></li>
+        <li><a href="/dashboard">Find Fish!</a></li>
+        <li><a class="selected" href="/dashboard/log">Log</a></li>
+        <li><a href="/dashboard/forum">Forum</a></li>
+        <li><a href="/logout" action>Log out</a></li>
+    </ul>
+</nav>
+<h1>Log Session</h1>
+<form>
+    <h3>Enter session conditions...</h3>
+    <input type="text" placeholder="Location" name="location">
+    <input type="text" placeholder="Tempature" name="temp">
+    <input type="text" placeholder="Wind Speed" name="windspeed">
+    <select name="weather-condition">
+        <option value="sunny">Sunny</option>
+        <option value="pc">Partly Cloudy</option>
+        <option value="cloudy">Cloudy</option>
+        <option value="rain">Rainy</option>
+    </select>
+    <input type="text" placeholder="Tide" name="tide">
+    <input type="text" placeholder="Wave Height" name="wave-height">
+    <input type="text" placeholder="Fish Caught (List with comma e.x Bass, Albie, etc.)" name="targetfish">
+    <input type="text" placeholder="Longest Catch" name="max-length">
+    <button type="submit" name="submit">Log Catches!</button>
+</form>

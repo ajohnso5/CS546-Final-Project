@@ -1,10 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const session = require('express-session');
-const bcrypt = require('bcrypt');
-const users = require("../database")
-
-
 
 router.get('/', async(req,res) =>{
 	return res.render("users/dashboard")
@@ -36,9 +31,5 @@ router.get('/forum', async(req,res) =>{
 	return res.render("users/forum")
 
 })
-
-
-
-
 
 module.exports = router;
