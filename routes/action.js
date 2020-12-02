@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const session = require('express-session');
 const bcrypt = require('bcrypt');
-const users = require("../users")
+const users = require("../database")
 
 
 

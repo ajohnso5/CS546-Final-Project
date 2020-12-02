@@ -2,40 +2,58 @@ const express = require('express');
 const router = express.Router();
 const session = require('express-session');
 const bcrypt = require('bcrypt');
-const users = require("../users")
+const users = require("../database")
+
+async function findUser(username) {
+  for(x in users){
+      if (users[x]["username"].toLowerCase() == username.toLowerCase()){
+        return users[x]
+      }
+  }
+
+  return 0;
+}
 
 
 //Homepage
-router.get('/',async(req,res) => {
-  return res.render('users/homepage');
+router.get('/', async (req,res) => {
+  if(req.session.error){
+  res.status(401).render('users/index',{error: req.session.error }); 
+  delete req.session.error;
+  return;
+  } 
+  return res.render('users/index');
 });
 
-
-
-//create account page
-router.get('/createAccount', async (req,res)=>{
-     return res.render('users/createAccount')
-});
 
 
 router.post('/createAccount', async (req,res)=>{
-      //Info that users input into here will be logged into the database
+      console.log(req.body.username)
+      console.log(req.body.password)
+      console.log(req.body.repass)
 });
 
-
-
-//login page
-router.get('/login',async(req,res)=>{
-      return res.render('users/login')
-});
 
 router.post('/login', async (req, res) => {
-//this will check the database and login the user if that user is found
+	try{
+
+  let foundUser = await findUser(req.body.username)
+  if(foundUser == 0)throw "Username or password is incorrect";
+  let match = await bcrypt.compare(req.body.password, foundUser['hashedPassword'])
+ 
+  if(match){
+    req.session.user = {  id: foundUser["_id"], username: foundUser["username"]};
+    return res.redirect("/dashboard")
+  }
+
+  else throw "Username or password is incorrect";
+
+    }catch(e){
+        res.status(401).render('users/index',{error: "Username or password is incorrect" });
+    }
 
 });
 
-
-//logout route when users want to log out
 router.get('/logout', async (req, res) => {
   req.session.destroy();
   res.redirect('/')
