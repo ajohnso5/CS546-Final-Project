@@ -1,18 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const session = require('express-session');
-const bcrypt = require('bcrypt');
-const users = require("../database")
-
-async function findUser(username) {
-  for(x in users){
-      if (users[x]["username"].toLowerCase() == username.toLowerCase()){
-        return users[x]
-      }
-  }
-
-  return 0;
-}
+const bcrypt = require('bcryptjs');
+//const users = require("../database")
 
 
 //Homepage
@@ -28,9 +18,18 @@ router.get('/', async (req,res) => {
 
 
 router.post('/createAccount', async (req,res)=>{
-      console.log(req.body.username)
-      console.log(req.body.password)
-      console.log(req.body.repass)
+  try{
+      if(req.body.password != req.body.repass) throw "Passwords do not match"
+      hashed = await bcrypt.hash(req.body.password, 12);
+      //log account into database
+
+
+      //Temporary user info for session
+      req.session.user = {  id: 1, username: req.body.username };
+      return res.redirect("/dashboard")
+    }catch(e){
+    res.status(401).render('users/index',{error: e });
+    }
 });
 
 

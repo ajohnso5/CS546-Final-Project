@@ -1,10 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const session = require('express-session');
-const bcrypt = require('bcrypt');
-const users = require("../database")
-
-
 
 router.get('/', async(req,res) =>{
 	return res.render("users/dashboard")
@@ -37,8 +32,10 @@ router.get('/forum', async(req,res) =>{
 
 })
 
-
-
+//This will add all data to the forum posts database
+router.post('/forum', async(req,res) =>{
+	console.log(req.body)
+})
 
 
 module.exports = router;
