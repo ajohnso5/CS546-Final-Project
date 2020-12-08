@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
+const sessionData = require(__dirname+"/../data/sessions");
 //const users = require("../database")
 
 async function findUser(username) {
@@ -57,6 +58,16 @@ router.post('/login', async (req, res) => {
 router.get('/logout', async (req, res) => {
   req.session.destroy();
   res.redirect('/')
+});
+
+router.get('/mysessions', async (req, res) => {
+  const sessions = await sessionData.getForUser(req.session.userId);
+  res.status(200).render('users/sessions', {sessions});
+});
+
+router.get('/sessions', async (req, res) => {
+  const sessions = await sessionData.getAll();
+  res.status(200).render('sessions', {sessions})
 });
 
 module.exports = router;

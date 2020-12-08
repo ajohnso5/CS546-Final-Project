@@ -46,6 +46,7 @@ function toObjectId(stringId) {
 }
 
 function stringifyObject(o) {
+    if (Array.isArray(o)) return o.map(x => stringifyObject(x));
     if (o instanceof ObjectId) return o;
     else if (o instanceof Object) {
         const keys = Object.keys(o);

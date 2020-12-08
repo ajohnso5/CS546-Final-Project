@@ -14,8 +14,9 @@ async function login(username, password) {
     return await bcrypt.compare(password, user.passwordHash);
 }
 
-async function register(username, password) {
-    utils.checkParams(utils.checkString, {username, password});
+async function register(username, password, repass) {
+    utils.checkParams(utils.checkString, {username, password, repass});
+    if (repass !== password) throw "Passwords do not match";
     checkUserNameNotExist(username);
     checkPassword(password);
     const usersCollection = await users();

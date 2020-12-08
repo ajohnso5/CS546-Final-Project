@@ -21,7 +21,12 @@ async function getWeather(year, month, day, hour, lat, long) {
     }
 }
 
-
+async function getForUser(userId) {
+    utils.checkParams(utils.checkStringIsObjectId, {userId});
+    const sessionsData = await sessions();
+    const userSessions = await sessionsData.findMany({userId: utils.toObjectId(userId)});
+    return utils.stringifyObject(userSessions);
+}
 
 async function create(userId, isPublic, lat, long, dateTime, note, durationHours, lures, 
     fishTypeId, avgLength, avgWeight, maxLength, maxWeight, notableCatches, quantity, tideId) {
@@ -132,5 +137,6 @@ model.exports = {
     remove, 
     getById,
     getAll,
-    update
+    update,
+    getForUser
 }

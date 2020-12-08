@@ -25,6 +25,13 @@ async function getAll() {
     return await helper.getAll(comments);
 }
 
+async function getCommentsForPostId(postId) {
+    const post = await helper.getById(posts, postId, "Post");
+    const commentCollection = await comments();
+    const comments = await commentCollection.findMany({postId: post._id});
+    return utils.stringifyObject(comments)
+}
+
 async function update(id, model) {
     await getById(id);
     if (model == null || Object.keys(model).length === 0) throw "No fields to update";
@@ -49,5 +56,6 @@ model.exports = {
     remove, 
     getById,
     getAll,
-    update
+    update,
+    getCommentsForPostId
 }

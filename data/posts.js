@@ -6,12 +6,12 @@ const posts = mongoCollections.posts;
 const fs = require("fs");
 
 
-async function create(title, userId, body, imageFile) {
+async function create(title, userId, body, imagePath) {
     utils.checkParams(utils.checkStringIsObjectId, {userId});
-    utils.checkParams(utils.checkString, {title, body});
+    utils.checkParams(utils.checkString, {title, body, imagePath});
     utils.checkExist(users, {_id: utils.toObjectId(userId)}, "User");
-    const imagePath = `/public/images/${title}_${userId}_${Date.now()}`;
-    fs.writeFileSync(imagePath, imageFile);
+    // const imagePath = `/public/images/${title}_${userId}_${Date.now()}`;
+    // fs.writeFileSync(imagePath, imageFile);
     return await helper.create(posts, {title, userId, body, imagePath}, "Post");
 }
 

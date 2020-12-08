@@ -9,7 +9,17 @@
     </ul>
 </nav>
 
+<form action="/action/post" method="POST" enctype="multipart/form-data">
+    <label for="postTitle">Title</label>
+    <input type="text" name="postTitle">
+    <label for="postImage">Image</label>
+    <input type="file" name="postImage">
+    <label for="postBody">Content</label>
+    <input type="text" name="postBody">
+    <button type="submit">Post</button>
+</form>
+
 <div id="forum-container">
     <h1>Forum</h1>
-
+    {{#e}}
 </div>
