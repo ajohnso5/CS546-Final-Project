@@ -1,19 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const commentData = require(__dirname+"/../data/comments");
-const sessionData = require(__dirname+"/../data/session");
+const sessionData = require(__dirname+"/../data/sessions");
 const postData = require(__dirname+"/../data/posts");
 const multer = require('multer');
-const upload = multer({dest: '/public/images/'});
+const upload = multer({dest: '../public/images/'});
 
 // Use client-side js to dynamically load posted content after post
 
 //post on the forum
 router.get('/post', async (req,res)=>{
-	return res.render('users/post')
+	return res.render('users/forum')
 });
-
-
 
 router.post('/post', upload.single('postImage'), async (req,res)=>{
 	//This will upload to website database and update the homepage of what users can see.
@@ -49,7 +47,7 @@ router.post('/comment', async (req,res)=>{
 
 //update Journal page
 router.get('/logfish', async (req,res)=>{
-	return res.render('users/logfish')
+	return res.render('users/log')
 });
 
 router.post('/logfish', async (req,res)=>{

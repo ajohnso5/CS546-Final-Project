@@ -51,7 +51,7 @@ async function update(id, model) {
     return await helper.update(comments, id, updates, "Comment");
 }
 
-model.exports = {
+module.exports = {
     create,
     remove, 
     getById,

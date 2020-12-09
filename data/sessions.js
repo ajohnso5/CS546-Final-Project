@@ -132,7 +132,7 @@ async function update(id, model) {
     return await helper.update(sessions, id, updates, "Session");
 }
 
-model.exports = {
+module.exports = {
     create,
     remove, 
     getById,

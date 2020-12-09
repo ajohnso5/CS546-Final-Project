@@ -1,4 +1,3 @@
-const { param } = require("../../../Labs/10/routes/login")
 const { ObjectId } = require("mongodb");
 
 function checkParams(fn, params) {
