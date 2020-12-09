@@ -29,9 +29,18 @@ router.get('/', async (req,res) => {
 
 
 router.post('/createAccount', async (req,res)=>{
-      console.log(req.body.username)
-      console.log(req.body.password)
-      console.log(req.body.repass)
+  try{
+      if(req.body.password != req.body.repass) throw "Passwords do not match"
+      hashed = await bcrypt.hash(req.body.password, 12);
+      //log account into database
+
+
+      //Temporary user info for session
+      req.session.user = {  id: 1, username: req.body.username };
+      return res.redirect("/dashboard")
+    }catch(e){
+    res.status(401).render('users/index',{error: e });
+    }
 });
 
 
