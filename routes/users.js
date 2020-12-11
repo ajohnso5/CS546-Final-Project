@@ -2,18 +2,16 @@ const express = require('express');
 const router = express.Router();
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
-const sessionData = require(__dirname+"/../data/sessions");
-//const users = require("../database")
+//const sessionData = require(__dirname+"/../data/sessions");
 
-async function findUser(username) {
-  // for(x in users){
-  //     if (users[x]["username"].toLowerCase() == username.toLowerCase()){
-  //       return users[x]
-  //     }
-  // }
+const data = require('../data');
 
-  return 0;
-}
+const sessionData = data.sessions;
+const tideData = data.tides;
+const fishData = data.fishTypes;
+const userData = data.users;
+const postData = data.posts;
+const commentData = data.comments;
 
 
 //Homepage
@@ -31,12 +29,10 @@ router.get('/', async (req,res) => {
 router.post('/createAccount', async (req,res)=>{
   try{
       if(req.body.password != req.body.repass) throw "Passwords do not match"
-      hashed = await bcrypt.hash(req.body.password, 12);
-      //log account into database
+     // hashed = await bcrypt.hash(req.body.password, 12);
+      const newUser = await userData.register(req.body.username, req.body.password, req.body.repass)
 
-
-      //Temporary user info for session
-      req.session.user = {  id: 1, username: req.body.username };
+      req.session.user = {  id: newUser._id, username: req.body.username };
       return res.redirect("/dashboard")
     }catch(e){
     res.status(401).render('users/index',{error: e });
@@ -47,19 +43,17 @@ router.post('/createAccount', async (req,res)=>{
 router.post('/login', async (req, res) => {
 	try{
 
-  let foundUser = await findUser(req.body.username)
-  if(foundUser == 0)throw "Username or password is incorrect";
-  let match = await bcrypt.compare(req.body.password, foundUser['hashedPassword'])
- 
-  if(match){
-    req.session.user = {  id: foundUser["_id"], username: foundUser["username"]};
+    const login = await userData.login(req.body.username,req.body.password)
+
+
+    if(!login)throw "username or password is incorrect"
+    const user = await userData.getUserByName(req.body.username)
+
+
+    req.session.user = {  id: user._id, username: user.username};
     return res.redirect("/dashboard")
-  }
-
-  else throw "Username or password is incorrect";
-
     }catch(e){
-        res.status(401).render('users/index',{error: "Username or password is incorrect" });
+        res.status(401).render('users/index',{error: e });
     }
 
 });

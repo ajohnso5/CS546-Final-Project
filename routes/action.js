@@ -9,18 +9,20 @@ const upload = multer({dest: '../public/images/'});
 // Use client-side js to dynamically load posted content after post
 
 //post on the forum
-router.get('/post', async (req,res)=>{
-	return res.render('users/forum')
-});
+// router.get('/post', async (req,res)=>{
+// 	return res.render('users/forum')
+// });
 
-router.post('/post', upload.single('postImage'), async (req,res)=>{
-	//This will upload to website database and update the homepage of what users can see.
-	const userId = req.session.userId;
-	const postImage = req.file;
-	const {postTitle, postBody} = req.body;
-	const createdPost = await postData.create(postTitle, userId, postBody, postImage);
-	res.status(200).json({post: createdPost});
-});
+// router.post('/post', upload.single('postImage'), async (req,res)=>{
+// 	//This will upload to website database and update the homepage of what users can see.
+// 	const userId = req.session.userId;
+// 	const postImage = req.file;
+// 	const {postTitle, postBody} = req.body;
+// 	const createdPost = await postData.create(postTitle, userId, postBody, postImage);
+// 	res.status(200).json({post: createdPost});
+// });
+
+
 
 
 router.get('/session', async (req,res)=>{
