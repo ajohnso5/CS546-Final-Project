@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const xss = require('xss');
 const data = require('../data');
 const sessionData = data.sessions;
 const tideData = data.tides;
@@ -48,11 +48,11 @@ router.get('/forum', async(req,res) =>{
 
 router.post('/forum', async(req,res) =>{
 	//this creates the post and adds it to the post collection 
-	const post = await postData.create(req.body.title, req.session.user.id, req.body.caption, req.body.image)
+	const post = await postData.create(xss(req.body.title), xss(req.session.user.id), xss(req.body.caption), xss(req.body.image))
 
 	//this gets the current username of the person who postes
 	const user = await userData.getById(req.session.user.id)
-	return res.json({username: user.username, thePost: post}) // returns object of data
+	return res.json({username: xss(user.username), thePost: xss(post)}) // returns object of data
 
 })
 
@@ -95,11 +95,11 @@ router.post('/allcomments',async(req,res) =>{
 
 router.post('/comments',async(req,res) =>{
 	//this creates the comment and adds it to the comment collection
-	const comment = await commentData.create(req.body.postId, req.session.user.id, req.body.comment)
+	const comment = await commentData.create(xss(req.body.postId), xss(req.session.user.id), xss(req.body.comment))
 
 	//gets username of the comment
 	const user = await userData.getById(req.session.user.id)
-	return res.json({username: user.username, commentInfo: comment});//returns object of data
+	return res.json({username: xss(user.username), commentInfo: xss(comment)});//returns object of data
 	
 })
 
