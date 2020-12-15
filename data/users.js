@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const NotFoundError = require('../errors/NotFoundError');
 const utils = require('./_utils');
 const mongoCollections = require('../config/mongoCollections');

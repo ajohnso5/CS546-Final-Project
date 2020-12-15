@@ -1,10 +1,11 @@
-const express = require('express');
+const express = require("express");
+const session = require("express-session");
 const router = express.Router();
-const commentData = require(__dirname+"/../data/comments");
-const sessionData = require(__dirname+"/../data/sessions");
-const postData = require(__dirname+"/../data/posts");
-const multer = require('multer');
-const upload = multer({dest: '../public/images/'});
+const commentData = require(__dirname + "/../data/comments");
+const sessionData = require(__dirname + "/../data/sessions");
+const postData = require(__dirname + "/../data/posts");
+const multer = require("multer");
+const upload = multer({ dest: "../public/images/" });
 
 // Use client-side js to dynamically load posted content after post
 
@@ -22,42 +23,69 @@ const upload = multer({dest: '../public/images/'});
 // 	res.status(200).json({post: createdPost});
 // });
 
-
-
-
-router.get('/session', async (req,res)=>{
-	return res.render('users/session')
+router.get("/session", async (req, res) => {
+  return res.render("users/session");
 });
 
-router.post('/session', async (req,res)=>{
-	//This will upload to website database and update the homepage of what users can see.
-	const userId = req.session.userId;
-	const {isPublic, lat, long, dateTime, note, durationHours, lures, fishTypeId, avgLength, avgWeight, maxLength, maxWeight, notableCatches, quantity, tideId} = req.body;
-	const createdSession = await sessionData.create(uesrId, isPublic, lat, long, dateTime, note, durationHours, lures, fishTypeId, avgLength, avgWeight, maxLength, maxWeight, notableCatches, quantity, tideId);
-	res.status(200).json({session: createdSession});
+router.post("/delete/:id", async (req, res) => {
+  const id = req.params.id;
+  const removal = await sessionData.remove(id);
+  return res.status(200).redirect("../../dashboard/journal");
 });
 
-
-router.post('/comment', async (req,res)=>{
-	//This will upload to website database and update the homepage of what users can see.
-	const userId = req.session.userId;
-	const {postId, body} = req.body;
-	const createdComment = await commentData.create(postId, userId, body);
-	res.status(200).json({comment: createdComment});
+router.post("/session", async (req, res) => {
+  //This will upload to website database and update the homepage of what users can see.
+  const userId = req.session.user.userId;
+  const {
+    isPublic,
+    loc,
+    date,
+    note,
+    durationHours,
+    lures,
+    fishTypeId,
+    avgLength,
+    avgWeight,
+    maxLength,
+    maxWeight,
+    notableCatches,
+    quantity,
+    tide,
+    waveheight,
+  } = req.body;
+  const createdSession = await sessionData.create(
+    userId,
+    isPublic,
+    loc,
+    date,
+    note,
+    durationHours,
+    lures,
+    fishTypeId,
+    avgLength,
+    avgWeight,
+    maxLength,
+    maxWeight,
+    notableCatches,
+    quantity,
+    tide,
+    waveheight
+  );
+  if (createdSession == "[object Object]")
+    return res
+      .status(200)
+      .render("users/log", { session: createdSession, created: true });
+  return res
+    .status(500)
+    .render("users/log", { session: createdSession, error: createdSession });
 });
 
-
-//update Journal page
-router.get('/logfish', async (req,res)=>{
-	return res.render('users/log')
+router.post("/comment", async (req, res) => {
+  //This will upload to website database and update the homepage of what users can see.
+  const userId = req.session.userId;
+  const { postId, body } = req.body;
+  const createdComment = await commentData.create(postId, userId, body);
+  res.status(200).json({ comment: createdComment });
 });
-
-router.post('/logfish', async (req,res)=>{
-	//This will update a users journal
-});
-
-
-
-
 
 module.exports = router;

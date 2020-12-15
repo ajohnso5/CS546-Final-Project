@@ -9,7 +9,7 @@ const data = require('../data');
 const sessionData = data.sessions;
 const tideData = data.tides;
 const fishData = data.fishTypes;
-const userData = data.users;
+const userData = require('../data/users');
 const postData = data.posts;
 const commentData = data.comments;
 
@@ -49,8 +49,9 @@ router.post('/login', async (req, res) => {
     if(!login)throw "username or password is incorrect"
     const user = await userData.getUserByName(req.body.username)
 
-
-    req.session.user = {  id: user._id, username: user.username};
+    console.log(user);
+    req.session.user = {  userId: user._id, username: user.username};
+    console.log(req.session.user);
     return res.redirect("/dashboard")
     }catch(e){
         res.status(401).render('users/index',{error: e });

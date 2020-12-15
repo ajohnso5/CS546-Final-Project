@@ -4,8 +4,7 @@ function checkParams(fn, params) {
     const keys = Object.keys(params);
     for (let i=0; i<keys.length; i++) {
         const key = keys[i];
-
-        fn(keys, params[key]);
+        fn(keys[i], params[key]);
     }
 }
 
@@ -31,7 +30,7 @@ function checkStringIsObjectId(paramName, paramValue) {
 }
 
 function checkFloat(paramName, paramValue) {
-    if (isNaN(paramValue)) throw `${paramName} is not a number`;
+    if ((typeof (parseInt(paramValue)) != 'number')) throw `${paramName} is not a number`;
 }
 
 function checkDateTime(paramName, paramValue) {
