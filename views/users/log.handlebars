@@ -1,28 +1,41 @@
 <nav>
     <ul>
         <li><a href="/dashboard/journal" action>Journal</a></li>
-        <li><a href="/dashboard/data" action>Data</a></li>
-        <li><a href="/dashboard">Find Fish!</a></li>
         <li><a class="selected" href="/dashboard/log">Log</a></li>
+        <li><a href="/dashboard">Find Fish!</a></li>
         <li><a href="/dashboard/forum">Forum</a></li>
         <li><a href="/logout" action>Log out</a></li>
     </ul>
 </nav>
 <h1>Log Session</h1>
-<form>
+{{#if created}}
+<p>Session Logged!</p>
+{{/if}}
+{{#if error}}
+<p>Error creating session: {{error}}</p>
+{{/if}}
+<form method="POST" action="/action/session">
     <h3>Enter session conditions...</h3>
-    <input type="text" placeholder="Location" name="location">
-    <input type="text" placeholder="Tempature" name="temp">
-    <input type="text" placeholder="Wind Speed" name="windspeed">
-    <select name="weather-condition">
-        <option value="sunny">Sunny</option>
-        <option value="pc">Partly Cloudy</option>
-        <option value="cloudy">Cloudy</option>
-        <option value="rain">Rainy</option>
+    <label for="isPublic">Public</label>
+    <input type="checkbox" name="isPublic" >
+    <input type="text" placeholder="Town and State (E.g Spring Lake NJ)" name="loc">
+    <input type="date" name="date">
+    <input type="number" name="durationHours" placeholder="Hours Spent">
+    <label for="tide">Tide</label>
+    <select name="tide">
+        <option value="High">High</option>
+        <option value="Low">Low</option>
+        <option value="Slack">Slack</option>    
     </select>
-    <input type="text" placeholder="Tide" name="tide">
-    <input type="text" placeholder="Wave Height" name="wave-height">
-    <input type="text" placeholder="Fish Caught (List with comma e.x Bass, Albie, etc.)" name="targetfish">
-    <input type="text" placeholder="Longest Catch" name="max-length">
+    <input type="number" placeholder="Avg Wave Height (Feet)" name="waveheight">
+    <input type="text" placeholder="Type of Fish Caught" name="fishTypeId">
+    <input type="text" placeholder="Lures" name="lures">
+    <input type="number" placeholder="Quantity" name="quantity">
+    <input type="number" placeholder="Average Length (Inches)" name="avgLength">
+    <input type="number" placeholder="Longest Catch (Inches)" name="maxLength">
+    <input type="number" placeholder="Average Weight (lbs)" name="avgWeight">
+    <input type="number" placeholder="Max Weight (lbs)" name="maxWeight">
+    <input type="text" placeholder="Notable Catches" name="notableCatches">
+    <input type="text" placeholder="Notes" name="note">
     <button type="submit" name="submit">Log Catches!</button>
 </form>

@@ -1,28 +1,3 @@
-{{!-- <nav>
-    <ul>
-        <li><a href="/dashboard/journal" action>Journal</a></li>
-        <li><a href="/dashboard/data" action>Data</a></li>
-        <li><a href="/dashboard">Find Fish!</a></li>
-        <li><a href="/dashboard/log">Log</a></li>
-        <li><a class="selected" href="/dashboard/forum">Forum</a></li>
-        <li><a href="/logout" action>Log out</a></li>
-    </ul>
-</nav>
-
-<form action="/action/post" method="POST" enctype="multipart/form-data">
-    <label for="postTitle">Title</label>
-    <input type="text" name="postTitle">
-    <label for="postImage">Image</label>
-    <input type="file" name="postImage">
-    <label for="postBody">Content</label>
-    <input type="text" name="postBody">
-    <button type="submit">Post</button>
-</form>
-
-<div id="forum-container">
-    <h1>Forum</h1>
-    {{#e}}
-</div> --}}
 <nav>
     <ul>
         <li><a href="/dashboard/journal" action>Journal</a></li>
@@ -44,13 +19,22 @@
 		<label for = "image"> Submit a picture!</label>
 			<input type="file" id = "image" accept="image/*"> 
 			<br>
+            <br>
+        <label for = "title"> Insert a title! </label>
+            <input type="text" id = "title">
+            <br>
+            <br>
 		<label for = "caption"> Insert a caption! </label>
 			<input type="text" id = "caption">
 			<br>
 			<button type ="submit"> Post! </button>
 	</form>
 	<br>
-	<div id="posts">  
+
+
+    <!-- div "posts" contains all posts -->
+	<div id="posts">
+    <!-- div tag "post" is a single post containing different content -->
 		<div id="post"> </div>
 	</div>
 

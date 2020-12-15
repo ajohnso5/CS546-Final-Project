@@ -4,12 +4,12 @@ function checkParams(fn, params) {
     const keys = Object.keys(params);
     for (let i=0; i<keys.length; i++) {
         const key = keys[i];
-        fn(key, params[key]);
+        fn(keys[i], params[key]);
     }
 }
 
 function checkString(paramName, paramValue) {
-    if (typeof paramValue != "string") throw `${paramName} is not a string`;
+   // if (typeof paramValue != "string") throw `${paramName} is not a string`;
     if (paramValue == null || paramValue == "") throw `${paramName} cannot be empty`;
 }
 
@@ -25,12 +25,12 @@ function checkBool(paramName, paramValue) {
 }
 
 function checkStringIsObjectId(paramName, paramValue) {
-    this.checkString(paramName, paramValue);
+    checkString(paramName, paramValue);
     if (!ObjectId.isValid(paramValue)) throw `${paramValue} is not a valid ObjectId`;
 }
 
 function checkFloat(paramName, paramValue) {
-    if (isNaN(paramValue)) throw `${paramName} is not a number`;
+    if ((typeof (parseInt(paramValue)) != 'number')) throw `${paramName} is not a number`;
 }
 
 function checkDateTime(paramName, paramValue) {
@@ -65,7 +65,7 @@ async function checkNotExist(collection, params, objName) {
 
 async function checkExist(collection, params, objName) {
     const col = await collection();
-    const result = await col.findOne({params});
+    const result = await col.find({params});
     if (result == null) throw `${objName} does not exist`;
 }
 

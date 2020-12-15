@@ -9,8 +9,8 @@ const users = mongoCollections.users;
 
 
 async function login(username, password) {
-    const user = getUserByName(username);
-    if (user == null) return NotFoundError("User not found for given username");
+    const user = await getUserByName(username);
+    if (user == null) throw ("User name or password is incorrect");
     return await bcrypt.compare(password, user.passwordHash);
 }
 
@@ -20,13 +20,17 @@ async function register(username, password, repass) {
     await checkUserNameNotExist(username);
     await checkPassword(password);
     const usersCollection = await users();
+
     const result = await usersCollection.insertOne({
         isAuthorized: false,
         username: username,
-        passwordHash: await hashpw(password)
+        passwordHash: await hashpw(password),
+        postsArray: [],
+        sessionArray: []
     });
+
     if (result.insertedCount === 0) throw "Could not register new user";
-    return get(result.insertedId.toString())
+    return getById(result.insertedId.toString())
 }
 
 
@@ -34,8 +38,8 @@ async function register(username, password, repass) {
 async function create(username, password, isAuthorized) {
     utils.checkParams(utils.checkString, {username, password});
     utils.checkParams(utils.checkBool, {isAuthorized});
-    await checkUserNameNotExist(username);
-    await checkPassword(password);
+    checkUserNameNotExist(username);
+    checkPassword(password);
     const pwHash = await hashpw(password);
     return await helper.create(users, {isAuthorized, username, password: pwHash}, "User");
 }
@@ -76,7 +80,7 @@ async function update(id, model) {
 
 
 async function checkUserNameNotExist(username) {
-    const user = getUserByName(username);
+    const user = await getUserByName(username);
     if (user != null) throw "User already exists";
 }
 
@@ -89,12 +93,12 @@ async function checkPassword(password) {
 }
 
 async function getUserByName(username) {
-    const usersCollection = await users();
-    return await usersCollection.Find({username});
+    const usersCollection = await users(); 
+    return await usersCollection.findOne({username: username});
 }
 
 async function hashpw(password) {
-    return await bcrypt.hash(password, bcrypt.genSalt(10))
+    return await bcrypt.hash(password, 10)
 }
 
 
@@ -105,5 +109,6 @@ module.exports = {
     remove,
     getById,
     getAll,
-    update
+    update,
+    getUserByName
 }

@@ -1,9 +1,8 @@
 <nav>
     <ul>
         <li><a class="selected" href="/dashboard/journal" action>Journal</a></li>
-        <li><a href="/dashboard/data">Data</a></li>
-        <li><a href="/dashboard" action>Find Fish!</a></li>
         <li><a href="/dashboard/log">Log</a></li>
+        <li><a href="/dashboard" action>Find Fish!</a></li>
         <li><a href="/dashboard/forum">Forum</a></li>
         <li><a href="/logout" action>Log out</a></li>
     </ul>
@@ -11,15 +10,23 @@
 <div id="journal_container">
     <h1>Your Fish Journal</h1>
     <ul>
+        {{#each sessions}}
         <li>
             <div class="journal_entry">
-                <p>Date: 1/11/19</p>
-                <p>Location: Seaside Park</p>
-                <p>Fish Caught: 3</p>
-                <p>Fish Types: Striper(2), Bluefish(1)</p>
-                <p>Weather: Sunny, 46&deg;F</p>
-                <p>Ocean Conditions: High Tide, 3-4ft Waves</p>
+                <p>Date: {{dateTime}}</p>
+                <p>Location: {{location}}</p>
+                <p>Fish Caught: {{fish.quantity}}</p>
+                <p>Effective Lures: {{fish.lures}}</p>
+                <p>Fish Types: {{fish.fishTypeId}}</p>
+                <p>Weather: {{weather.condition}}, {{weather.temp}}&deg;F</p>
+                <p>Wind Speed: {{weather.wind_speed}}</p>
+                <p>Ocean Conditions: {{water_conditions.tide}} Tide, {{water_conditions.waveheight}}ft Waves</p>
+                <p>Notable Catches: {{notableCatches}}</p>
+                <form action="/action/delete/{{_id}}" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
             </div>
         </li>
+        {{/each}}
     </ul>
 </div>
