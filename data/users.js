@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const NotFoundError = require('../errors/NotFoundError');
 const utils = require('./_utils');
 const mongoCollections = require('../config/mongoCollections');
@@ -9,24 +9,28 @@ const users = mongoCollections.users;
 
 
 async function login(username, password) {
-    const user = getUserByName(username);
-    if (user == null) return NotFoundError("User not found for given username");
+    const user = await getUserByName(username);
+    if (user == null) throw ("User name or password is incorrect");
     return await bcrypt.compare(password, user.passwordHash);
 }
 
 async function register(username, password, repass) {
     utils.checkParams(utils.checkString, {username, password, repass});
     if (repass !== password) throw "Passwords do not match";
-    checkUserNameNotExist(username);
-    checkPassword(password);
+    await checkUserNameNotExist(username);
+    await checkPassword(password);
     const usersCollection = await users();
+
     const result = await usersCollection.insertOne({
         isAuthorized: false,
         username: username,
-        passwordHash: await hashpw(password)
+        passwordHash: await hashpw(password),
+        postsArray: [],
+        sessionArray: []
     });
+
     if (result.insertedCount === 0) throw "Could not register new user";
-    return get(result.insertedId.toString())
+    return getById(result.insertedId.toString())
 }
 
 
@@ -76,7 +80,7 @@ async function update(id, model) {
 
 
 async function checkUserNameNotExist(username) {
-    const user = getUserByName(username);
+    const user = await getUserByName(username);
     if (user != null) throw "User already exists";
 }
 
@@ -89,12 +93,12 @@ async function checkPassword(password) {
 }
 
 async function getUserByName(username) {
-    const usersCollection = await users();
-    return await usersCollection.Find({username});
+    const usersCollection = await users(); 
+    return await usersCollection.findOne({username: username});
 }
 
 async function hashpw(password) {
-    return await bcrypt.hash(password, bcrypt.genSalt(10))
+    return await bcrypt.hash(password, 10)
 }
 
 
@@ -105,5 +109,6 @@ module.exports = {
     remove,
     getById,
     getAll,
-    update
+    update,
+    getUserByName
 }

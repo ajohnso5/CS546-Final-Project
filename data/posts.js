@@ -7,12 +7,20 @@ const fs = require("fs");
 
 
 async function create(title, userId, body, imagePath) {
-    utils.checkParams(utils.checkStringIsObjectId, {userId});
-    utils.checkParams(utils.checkString, {title, body, imagePath});
-    utils.checkExist(users, {_id: utils.toObjectId(userId)}, "User");
-    // const imagePath = `/public/images/${title}_${userId}_${Date.now()}`;
+
+    await utils.checkParams(utils.checkStringIsObjectId, {userId});
+    await utils.checkParams(utils.checkString, {title, body, imagePath});
+    await utils.checkExist(users, {_id: utils.toObjectId(userId)}, "User");
+
+    // const imageFile = `/public/images/${title}_${userId}_${Date.now()}`;
     // fs.writeFileSync(imagePath, imageFile);
-    return await helper.create(posts, {title, userId, body, imagePath}, "Post");
+    commentsArray = []
+    const myPost = await helper.create(posts, {title, userId, body, imagePath, commentsArray}, "Post");
+    const usersCollection = await users();
+    usersCollection.updateOne({_id: utils.toObjectId(userId)},{$addToSet:{postsArray: myPost._id}})
+
+    return myPost;
+
 }
 
 async function remove(id) {

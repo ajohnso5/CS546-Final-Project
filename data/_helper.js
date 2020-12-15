@@ -20,7 +20,7 @@ async function getById(collection, id, objName) {
     const col = await collection();
     const result = await col.findOne({_id: utils.toObjectId(id)});
     if (result == null) throw `No ${objName} found for given id`;
-    return utils.stringifyObject(result);
+    return result.toString();
 }
 
 async function getAll(collection) {
