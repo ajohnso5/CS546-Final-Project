@@ -18,7 +18,7 @@ async function remove(collection, id, objName) {
 async function getById(collection, id, objName) {
     utils.checkParams(utils.checkStringIsObjectId, {id});
     const col = await collection();
-    const result = await usersCollection.findOne({_id: utils.toObjectId(id)});
+    const result = await col.findOne({_id: utils.toObjectId(id)});
     if (result == null) throw `No ${objName} found for given id`;
     return utils.stringifyObject(result);
 }
