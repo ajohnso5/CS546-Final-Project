@@ -4,7 +4,7 @@ function checkParams(fn, params) {
     const keys = Object.keys(params);
     for (let i=0; i<keys.length; i++) {
         const key = keys[i];
-        fn(keys, params[keys]);
+        fn(key, params[key]);
     }
 }
 

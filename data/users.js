@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const NotFoundError = require('../errors/NotFoundError');
 const utils = require('./_utils');
 const mongoCollections = require('../config/mongoCollections');
@@ -17,8 +17,8 @@ async function login(username, password) {
 async function register(username, password, repass) {
     utils.checkParams(utils.checkString, {username, password, repass});
     if (repass !== password) throw "Passwords do not match";
-    checkUserNameNotExist(username);
-    checkPassword(password);
+    await checkUserNameNotExist(username);
+    await checkPassword(password);
     const usersCollection = await users();
     const result = await usersCollection.insertOne({
         isAuthorized: false,
@@ -34,8 +34,8 @@ async function register(username, password, repass) {
 async function create(username, password, isAuthorized) {
     utils.checkParams(utils.checkString, {username, password});
     utils.checkParams(utils.checkBool, {isAuthorized});
-    checkUserNameNotExist(username);
-    checkPassword(password);
+    await checkUserNameNotExist(username);
+    await checkPassword(password);
     const pwHash = await hashpw(password);
     return await helper.create(users, {isAuthorized, username, password: pwHash}, "User");
 }
