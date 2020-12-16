@@ -9,6 +9,7 @@ const postData = require("../data/posts");
 const commentData = data.comments;
 const { ObjectId } = require("mongodb");
 const session = require("express-session");
+const xss = require('xss');
 
 router.get("/", async (req, res) => {
   return res.render("users/dashboard");
@@ -101,9 +102,9 @@ router.post("/forum", async (req, res) => {
   //this creates the post and adds it to the post collection
   const { title, caption } = req.body;
   const post = await postData.create(
-    title,
-    req.session.user.userId,
-    caption,
+    xss(title),
+    xss(req.session.user.userId),
+    xss(caption),
     null
   );
 
