@@ -15,7 +15,16 @@ async function create(title, userId, body, imagePath) {
     // const imageFile = `/public/images/${title}_${userId}_${Date.now()}`;
     // fs.writeFileSync(imagePath, imageFile);
     commentsArray = []
-    const myPost = await helper.create(posts, {title, userId, body, imagePath, commentsArray}, "Post");
+    const newPost = {
+        title: title,
+        userId: userId,
+        body: body,
+        imagePath: imagePath,
+        commentsArray: commentsArray
+    }
+
+
+    const myPost = await helper.create(posts, newPost, "Post");
     const usersCollection = await users();
     usersCollection.updateOne({_id: utils.toObjectId(userId)},{$addToSet:{postsArray: myPost._id}})
 

@@ -17,25 +17,10 @@ async function login(username, password) {
 async function register(username, password, repass) {
     utils.checkParams(utils.checkString, {username, password, repass});
     if (repass !== password) throw "Passwords do not match";
-    await checkUserNameNotExist(username);
     await checkPassword(password);
-    const usersCollection = await users();
 
-    const result = await usersCollection.insertOne({
-        isAuthorized: false,
-        username: username,
-        passwordHash: await hashpw(password),
-        postsArray: [],
-        sessionArray: []
-    });
-    // console.log(result);
-    // console.log(utils.stringifyObject(result));
-
-    if (result.insertedCount === 0) throw "Could not register new user";
-    // console.log(result.insertedId);
-    // const test = await getById(result.insertedId);
-    // console.log(JSON.stringify(test));
-    return await getById(result.insertedId);
+    // register is a special version of create() that only creates users that do not have admin privileges.
+    return await create(username, password, false);
 }
 
 
@@ -46,24 +31,27 @@ async function create(username, password, isAuthorized) {
     await checkUserNameNotExist(username);
     await checkPassword(password);
     const pwHash = await hashpw(password);
-    return await helper.create(users, {isAuthorized, username, password: pwHash}, "User");
+    const usersCollection = await users();
+    
+    let newUser = {
+        isAuthorized: isAuthorized,
+        username: username,
+        passwordHash: await hashpw(password),
+        postsArray: [],
+        sessionArray: []
+    }
+
+    return await helper.create(users, newUser, 'User');
 }
 
 async function remove(id) {
     return await helper.remove(users, id, "User");
 }
 
+// Generalized helper function to get any object from chosen collection
 async function getById(id) {
     return await helper.getById(users, id, "User");
 }
-
-// lecture code that when swapped in that makes getById() not return null
-// async function getUserById(id) {
-//     const userCollection = await users();
-//     const user = await userCollection.findOne({ _id: id });
-//     if (!user) throw 'User not found';
-//     return user;
-//   }
 
 async function getAll() {
     return await helper.getAll(users);
