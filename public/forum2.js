@@ -32,7 +32,7 @@ function populateComments(commentContainer, comments) {
                 <p>${body}</p>
                 <div class="comment__meta">
                     <span class="comment__username">${user.username}</span>
-                    <span class="comment__date">${date}</span>
+                    <span class="comment__date">${date.split("::")[0]}</span>
                 </div>
             </div>
         `);
