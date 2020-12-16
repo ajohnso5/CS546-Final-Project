@@ -112,7 +112,7 @@ Journal
   margin: 0 auto;
 }
 
-#journal_container ul {
+.journal_container ul {
   list-style: none;
 }
 

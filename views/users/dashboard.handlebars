@@ -8,7 +8,7 @@
     </ul>
 </nav>
 <h1>Find Fish</h1>
-<form>
+<form method="POST" action="/dashboard/findfish">
     <h3>Enter today's conditions...</h3>
     <input type="text" placeholder="Tempature" name="temp">
     <input type="text" placeholder="Wind Speed" name="windspeed">
@@ -23,3 +23,26 @@
     <input type="targetfish" placeholder="Targeted Fish" name="targetFish">
     <button type="submit" name="submit">Find me fish!</button>
 </form>
+{{#if error}}
+<p>Error: {{error}}</p>
+{{/if}}
+{{#if session}}
+<div class="journal_container">
+    <h1>Most Similar Session</h1>
+    <ul>
+        <li>
+            <div class="journal_entry">
+                <p>Date: {{session.dateTime}}</p>
+                <p>Location: {{session.location}}</p>
+                <p>Fish Caught: {{session.fish.quantity}}</p>
+                <p>Effective Lures: {{session.fish.lures}}</p>
+                <p>Fish Types: {{session.fish.fishTypeId}}</p>
+                <p>Weather: {{session.weather.condition}}, {{session.weather.temp}}&deg;F</p>
+                <p>Wind Speed: {{session.weather.wind_speed}}</p>
+                <p>Ocean Conditions: {{session.water_conditions.tide}} Tide, {{session.water_conditions.waveheight}}ft Waves</p>
+                <p>Notable Catches: {{session.notableCatches}}</p>
+            </div>
+        </li>
+    </ul>
+</div>
+{{/if}}

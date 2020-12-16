@@ -8,6 +8,7 @@ const postData = require("../data/posts");
 
 const commentData = data.comments;
 const { ObjectId } = require("mongodb");
+const session = require("express-session");
 
 router.get("/", async (req, res) => {
   return res.render("users/dashboard");
@@ -17,7 +18,7 @@ router.get("/journal", async (req, res) => {
   const d = await sessionData.getForUser(req.session.user.userId);
   const u = await userData.getById(req.session.user.userId);
   const username = u.username;
-  return res.render("users/journal", { sessions: d.reverse(), name: username});
+  return res.render("users/journal", { sessions: d.reverse(), name: username });
 });
 
 router.get("/journal/:id", async (req, res) => {
@@ -31,10 +32,18 @@ router.get("/journal/:id", async (req, res) => {
   const username = u.username;
   const newd = [];
   d.forEach(function (item) {
-    if(item.isPublic == true) newd.push(item);
+    if (item.isPublic == true) newd.push(item);
   });
-  if(checkForPub) return res.render("users/journal", {sessions: newd.reverse(), name: username});
-  else return res.render("users/journal", {sessions: d.reverse(), name: username});
+  if (checkForPub)
+    return res.render("users/journal", {
+      sessions: newd.reverse(),
+      name: username,
+    });
+  else
+    return res.render("users/journal", {
+      sessions: d.reverse(),
+      name: username,
+    });
 });
 
 // get all the posts for forum
@@ -45,6 +54,39 @@ router.get("/posts", async (req, res) => {
 
 router.get("/findfish", async (req, res) => {
   return res.render("users/dashboard");
+});
+
+router.post("/findfish", async (req, res) => {
+  try {
+    const userId = req.session.user.userId;
+    const {
+      temp,
+      windspeed,
+      weatherCondition,
+      tide,
+      waveHeight,
+      targetFish,
+    } = req.body;
+    const sessions = await sessionData.getForUser(userId);
+    let bestSession = {};
+    let highestScore = -1;
+    sessions.forEach(function (x) {
+      let score = 0;
+      if (x.water_conditions.tide.toUpperCase() == tide.toUpperCase()) score = score + 5;
+      if (x.fish.fishTypeId.toUpperCase().includes(targetFish.toUpperCase())) score = score + 10;
+      if (x.weather.condition.toUpperCase() == weatherCondition.toUpperCase()) score = score + 2;
+      if ((Math.abs(x.weather.wind_speed - windspeed) < 8)) score = score + 3;
+      if ((Math.abs(x.water_conditions.waveheight - waveHeight) < 3)) score = score + 2;
+      if (score > highestScore) {
+        highestScore = score;
+        bestSession = x;
+      }
+      score = 0;
+    });
+    return res.render("users/dashboard", { session: bestSession });
+  } catch (e) {
+    return res.render("users/dashboard", { error: e });
+  }
 });
 
 router.get("/log", async (req, res) => {
