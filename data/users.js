@@ -6,8 +6,6 @@ const helper = require('./_helper');
 const users = mongoCollections.users;
 
 
-
-
 async function login(username, password) {
     const user = await getUserByName(username);
     if (user == null) throw ("User name or password is incorrect");

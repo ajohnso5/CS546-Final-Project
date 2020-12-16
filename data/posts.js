@@ -61,13 +61,11 @@ async function update(id, model) {
 }
 
 async function addAction(id, obj) {
-    console.log("Adding", obj);
     const postCollection = await posts();
     await postCollection.updateOne({_id: utils.toObjectId(id)}, {$addToSet: obj});
 }
 
 async function removeAction(id, obj) {
-    console.log("Removing", obj);
     const postCollection = await posts();
     await postCollection.updateOne({_id: utils.toObjectId(id)}, {$pull: obj});
 }

@@ -4,7 +4,7 @@ async function create(collection, params, objName) {
     const col = await collection();
     const result = await col.insertOne(params);
     if (result.insertedCount === 0) throw `Could not create ${objName}`;
-    return getById(collection, result.insertedId.toString(), objName); 
+    return await getById(collection, result.insertedId.toString(), objName); 
 }
 
 async function remove(collection, id, objName) {
@@ -33,7 +33,7 @@ async function update(collection, id, params, objName) {
     const col = await collection();
     const result = col.updateOne({_id: id}, {$set: params});
     if (result.modifiedCount === 0) throw `Could not updated ${objName}`;
-    return getById(collection, id, objName);
+    return await getById(collection, id, objName);
 }
 
 
