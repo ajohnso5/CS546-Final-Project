@@ -22,9 +22,16 @@ router.get("/journal", async (req, res) => {
   return res.render("users/journal", { sessions: d.reverse() });
 });
 
+router.get("/journal/:id", async (req, res) => {
+  const id = req.params.id;
+  if(req.session.user.userId == id) res.redirect('/journal');
+  const d = await sessionData.getForUser(req.session.user.userId);
+  return res.render("users/log");
+});
+
 // get all the posts for forum
 router.get("/posts", async (req, res) => {
-	const posts = await postData.getAllNonLazy();
+  const posts = await postData.getAllNonLazy();
 	return res.status(200).json(posts);
 });
 

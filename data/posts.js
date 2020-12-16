@@ -34,12 +34,14 @@ async function getAll() {
 
 async function getAllNonLazy() {
     const allPosts = await helper.getAll(posts);
+    if(allPosts.length == 0) return allPosts;
     for (let i=0; i<allPosts.length; i++) {
-        const userId = allPosts[i].userId.toString();
+        const userId = allPosts[i].userId;
+        if(userId == null) continue;
         allPosts[i].user = await userData.getById(userId);
         allPosts[i].comments = await commentData.getCommentsForPostId(allPosts[i]._id.toString());
     }
-    return utils.sortByDate(allPosts);
+    return allPosts.reverse();
 }
 
 

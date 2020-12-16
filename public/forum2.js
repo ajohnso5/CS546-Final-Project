@@ -158,6 +158,7 @@ function loadPosts() {
 function populatePosts(posts) {
     postsDiv.empty();
     for (let i=0; i<posts.length; i++) {
+        try{
         const post = posts[i];
         const {title, body, user, date, likes, dislikes, reports} = post;
         const likeClass = likes.includes(user._id) ? "fa-thumbs-up" : "fa-thumbs-o-up";
@@ -168,7 +169,7 @@ function populatePosts(posts) {
             <h2>${title}</h2>
             <span>${body}</span>
             <div class="post__meta">
-                <span class="post__username">${user.username}</span>
+                <a href="/dashboard/journal/${user._id}"<span class="post__username">${user.username}</span></a>
                 <span class="post__date">${date.split("::")[0]}</span>
             </div>
             <div class="post__action">
@@ -188,6 +189,9 @@ function populatePosts(posts) {
             <div class="comments"></div>
             <button class="post__btn--viewComments">view comments</button>
             <button class="post__btn--comment">add comment</button>
-        </div>`);    
+        </div>`);  
+        } catch(e) {
+            console.log("Error displaying forumn post. Error: " + e);
+        }  
     }
 };
