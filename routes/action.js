@@ -123,8 +123,46 @@ router.post("/remove/report", async (req, res) => {
 
 router.get("/comments/:id", async (req, res) => {
   const postId = req.params.id;
-  const foundComments = await commentData.getCommentsForPostId(postId);
+  const foundComments = await commentData.getCommentsForPostId(postId, req.session.user.userId);
   res.status(200).json({comments: foundComments});
+});
+
+router.post("/addComment/like", async (req, res) => {
+  await commentData.addLike(req.body.commentId, req.session.user.userId);
+  res.status(200).json({ message: "Added like successfully" });
+});
+
+
+router.post("/addComment/dislike", async (req, res) => {
+  await commentData.addDislike(req.body.commentId, req.session.user.userId);
+  res.status(200).json({ message: "Added dislike successfully" });
+});
+
+router.post("/addComment/report", async (req, res) => {
+  await commentData.addReport(req.body.commentId, req.session.user.userId);
+  res.status(200).json({ message: "Added report successfully" });
+});
+
+
+router.post("/removeComment/like", async (req, res) => {
+  await commentData.removeLike(req.body.commentId, req.session.user.userId);
+  res.status(200).json({ message: "Removed like successfully" });
+});
+
+
+router.post("/removeComment/dislike", async (req, res) => {
+  await commentData.removeDislike(req.body.commentId, req.session.user.userId);
+  res.status(200).json({ message: "Removed dislike successfully" });
+});
+
+router.post("/removeComment/report", async (req, res) => {
+  await commentData.removeReport(req.body.commentId, req.session.user.userId);
+  res.status(200).json({ message: "Removed report successfully" });
+});
+
+router.delete("/comment/:id", async (req, res) => {
+  await commentData.removeUsersComment(req.params.id, req.session.user.userId);
+  res.status(200).json({ message: "Deleted successfully" });
 });
 
 module.exports = router;

@@ -1,6 +1,5 @@
 const postsDiv = $("#posts");
 
-
 $(document).ready(() => loadPosts());
 $("#postForm").submit((e) => submitPost(e));
 postsDiv.on("click", ".post__like", (e) => toggleLike(e));
@@ -10,6 +9,67 @@ postsDiv.on("click", ".post__btn--comment", (e) => openCommentBox(e));
 postsDiv.on("click", ".comment__btn--close", (e) => closeCommentBox(e));
 postsDiv.on("click", ".comment__btn--post", (e) => postComment(e));
 postsDiv.on("click", ".post__btn--viewComments", (e) => viewComments(e));
+postsDiv.on("click", ".comment__like", (e) => toggleCommentLike(e));
+postsDiv.on("click", ".comment__dislike", (e) => toggleCommentDislike(e));
+postsDiv.on("click", ".comment__report", (e) => toggleCommentReport(e));
+postsDiv.on("click", ".comment__btn--delete", (e) => removeComment(e));
+
+
+function removeComment(e) {
+    e.preventDefault();
+    const commentId = getCommentId(e);
+    $.ajax({
+        url: "/action/comment/"+commentId,
+        type: "DELETE",
+        success: (data) => {
+            viewComments(e);
+        }
+    });
+}
+
+function getCommentId(e) {
+    const target = $(e.target);
+    return target.parents(".comment").attr("id");
+}
+
+function commentAction(url, commentId) {
+    $.post(url, {commentId}, (data, status) => {
+        if (status !== "success") {
+            alert("Error with action");
+            console.log(data, status);
+        }
+    })
+}
+
+function handleCommentAction(e, targetClass, action) {
+    e.preventDefault();
+    const postId = getPostId(e);
+    const commentId = getCommentId(e);
+    const actionClass = getActionClass(e);
+    const commentContainer = $(e.target).parents(".commentContainer");
+    if (actionClass.includes(targetClass)) {
+        commentAction("/action/addComment/"+action, commentId);
+    }
+    else {
+        commentAction("/action/removeComment/"+action, commentId);
+    }
+    viewComments(e);
+}
+
+function toggleCommentLike(e) {
+    handleCommentAction(e, "fa-thumbs-o-up", "like");
+}
+
+
+function toggleCommentDislike(e) {
+    handleCommentAction(e, "fa-thumbs-o-down", "dislike");    
+}
+
+
+function toggleCommentReport(e) {
+    handleCommentAction(e, "fa-flag-o", "report");    
+}
+
 
 function getComments(postId, commentContainer) {
     $.get("/action/comments/"+postId, (data, status) => {
@@ -26,13 +86,33 @@ function getComments(postId, commentContainer) {
 function populateComments(commentContainer, comments) {
     commentContainer.empty();
     for (let i=0; i<comments.length; i++) {
-        const {body, user, date} = comments[i];
+        const {_id, body, user, currentUser, date, likes, dislikes, reports} = comments[i];
+        const likeClass = likes.includes(user._id) ? "fa-thumbs-up" : "fa-thumbs-o-up";
+        const dislikeClass = dislikes.includes(user._id) ? "fa-thumbs-down" : "fa-thumbs-o-down";
+        const reportClass = reports.includes(user._id) ? "fa-flag" : "fa-flag-o";
+        const commentDelete = currentUser ? `<button class="comment__btn--delete">Delete</button>` : "";
+        console.log(comments);
         commentContainer.append(`
-            <div class="comment">
+            <div id="${_id}" class="comment">
                 <p>${body}</p>
                 <div class="comment__meta">
                     <span class="comment__username">${user.username}</span>
                     <span class="comment__date">${date.split("::")[0]}</span>
+                    <div class="comment__action">
+                        <span>${likes.length}</span>
+                        <a class="comment__like">
+                            <i class="fa ${likeClass}"></i>
+                        </a>
+                        <span>${dislikes.length}</span>
+                        <a class="comment__dislike">
+                            <i class="fa ${dislikeClass}"></i>
+                        </a>
+                        <span>${reports.length}</span>
+                        <a class="comment__report">
+                            <i class="fa ${reportClass}"></i>
+                        </a>
+                        ${commentDelete}
+                    </div>
                 </div>
             </div>
         `);
@@ -60,6 +140,7 @@ function postComment(e) {
         }
     });
     viewComments(e);
+    closeCommentBox(e);
 }
 
 function closeCommentBox(e) {

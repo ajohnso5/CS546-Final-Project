@@ -11,7 +11,7 @@ async function create(postId, userId, body) {
     utils.checkParams(utils.checkString, {body});
     utils.checkExist(users, {_id: utils.toObjectId(userId)}, "User");
     utils.checkExist(posts, {_id: utils.toObjectId(postId)}, "Post");
-    const comment = await helper.create(comments, {postId, userId, body, date: utils.getDate()}, "Comment")
+    const comment = await helper.create(comments, {postId, userId, body, date: utils.getDate(), likes:[], dislikes:[], reports:[]}, "Comment")
     const postsCollection = await posts();
     const updated = await postsCollection.updateOne({_id: utils.toObjectId(postId)},{$addToSet:{commentsArray: comment._id}})
     return comment;
@@ -30,14 +30,14 @@ async function getAll() {
     return utils.sortByDate(allComments);
 }
 
-async function getCommentsForPostId(postId) {
+async function getCommentsForPostId(postId, curUserId) {
     const post = await helper.getById(posts, postId, "Post");
     const commentCollection = await comments();
     const foundComments = await commentCollection.find({postId: postId}).toArray();
     for (let i=0; i<foundComments.length; i++) {
         foundComments[i].user = await userData.getById(foundComments[i].userId);
+        foundComments[i].currentUser = curUserId == foundComments[i].userId;
     }
-    console.log("Found comments:", foundComments);
     return utils.sortByDate(foundComments);
 }
 
@@ -60,11 +60,71 @@ async function update(id, model) {
     return await helper.update(comments, id, updates, "Comment");
 }
 
+
+
+async function addAction(id, obj) {
+    console.log("Add", obj);
+    const commentCollection = await comments();
+    await commentCollection.updateOne({_id: utils.toObjectId(id)}, {$addToSet: obj});
+}
+
+async function removeAction(id, obj) {
+    console.log("Remove", obj);
+    const commentCollection = await comments();
+    await commentCollection.updateOne({_id: utils.toObjectId(id)}, {$pull: obj});
+}
+
+
+async function addLike(id, userId) {
+    utils.checkParams(utils.checkStringIsObjectId, {id, userId});
+    await Promise.all([addAction(id, {likes: userId}), removeAction(id, {dislikes: userId})]);
+}
+
+async function addDislike(id, userId) {
+    utils.checkParams(utils.checkStringIsObjectId, {id, userId});
+    await Promise.all([addAction(id, {dislikes: userId}), removeAction(id, {likes: userId})]);
+}
+
+async function addReport(id, userId) {
+    utils.checkParams(utils.checkStringIsObjectId, {id, userId});
+    await addAction(id, {reports: userId});
+}
+
+async function removeLike(id, userId) {
+    utils.checkParams(utils.checkStringIsObjectId, {id, userId});
+    await removeAction(id, {likes: userId});
+}
+
+async function removeDislike(id, userId) {
+    utils.checkParams(utils.checkStringIsObjectId, {id, userId});
+    await removeAction(id, {dislikes: userId});
+}
+
+async function removeReport(id, userId) {
+    utils.checkParams(utils.checkStringIsObjectId, {id, userId});
+    await removeAction(id, {reports: userId});
+}
+
+async function removeUsersComment(id, userId) {
+    utils.checkParams(utils.checkStringIsObjectId, {id, userId});
+    const comment = await getById(id);
+    if (comment.userId.toString() !== userId) throw "User does not have permission to delete this comment";
+    await remove(id);
+}
+
+
 module.exports = {
     create,
     remove, 
     getById,
     getAll,
     update,
-    getCommentsForPostId
+    getCommentsForPostId,
+    addLike,
+    addDislike,
+    addReport,
+    removeLike,
+    removeDislike,
+    removeReport,
+    removeUsersComment
 }
