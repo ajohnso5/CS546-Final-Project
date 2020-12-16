@@ -8,12 +8,22 @@ postsDiv.on("click", ".post__report", (e) => toggleReport(e));
 postsDiv.on("click", ".post__btn--comment", (e) => openCommentBox(e));
 postsDiv.on("click", ".comment__btn--close", (e) => closeCommentBox(e));
 postsDiv.on("click", ".comment__btn--post", (e) => postComment(e));
-postsDiv.on("click", ".post__btn--viewComments", (e) => viewComments(e));
+postsDiv.on("click", ".post__btn--viewComments", (e) => toggleCommentBox(e));
 postsDiv.on("click", ".comment__like", (e) => toggleCommentLike(e));
 postsDiv.on("click", ".comment__dislike", (e) => toggleCommentDislike(e));
 postsDiv.on("click", ".comment__report", (e) => toggleCommentReport(e));
 postsDiv.on("click", ".comment__btn--delete", (e) => removeComment(e));
 
+function toggleCommentBox(e) {
+    const target = $(e.target);
+    const commentContainer = target.parents(".post").children(".comments");
+    if (commentContainer.children(".comment").length === 0) {
+        viewComments(e);
+    }
+    else {
+        commentContainer.empty();
+    }
+}
 
 function removeComment(e) {
     e.preventDefault();
