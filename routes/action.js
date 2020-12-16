@@ -35,6 +35,7 @@ router.post("/delete/:id", async (req, res) => {
 
 router.post("/session", async (req, res) => {
   //This will upload to website database and update the homepage of what users can see.
+  try{
   const userId = req.session.user.userId;
   const {
     isPublic,
@@ -53,6 +54,21 @@ router.post("/session", async (req, res) => {
     tide,
     waveheight,
   } = req.body;
+
+  if(!loc.replace(/\s/g, '').length) throw "Town and State can not be empty"
+  if(!date.replace(/\s/g, '').length) throw "Date can not be empty"
+  if(!durationHours.replace(/\s/g, '').length) throw "Hours Spent can not be empty"
+  if(!waveheight.replace(/\s/g, '').length) throw "Wave height can not be empty"
+  if(!fishTypeId.replace(/\s/g, '').length) throw "Fish type can not be empty"
+  if(!lures.replace(/\s/g, '').length) throw "Lures can not be empty"
+  if(!quantity.replace(/\s/g, '').length) throw "Quantity can not be empty"
+  if(!avgLength.replace(/\s/g, '').length) throw "avgLength can not be empty"
+  if(!maxLength.replace(/\s/g, '').length) throw "Longest catch can not be empty"
+  if(!avgWeight.replace(/\s/g, '').length) throw "Average weight can not be empty"
+  if(!maxWeight.replace(/\s/g, '').length) throw "Max weight can not be empty"
+  if(!notableCatches.replace(/\s/g, '').length) throw "Notable catches can not be empty"
+  if(!note.replace(/\s/g, '').length) throw "Notes can not be empty"
+    
   const createdSession = await sessionData.create(
     userId,
     isPublic,
@@ -78,14 +94,22 @@ router.post("/session", async (req, res) => {
   return res
     .status(500)
     .render("users/log", { session: createdSession, error: createdSession });
+  }catch(e){
+    return res.status(500).render("users/log", { error: e });
+  }
 });
 
 router.post("/comment", async (req, res) => {
   //This will upload to website database and update the homepage of what users can see.
+  try{
   const userId = req.session.user.userId;
   const { postId, body } = req.body;
+  if(!body.replace(/\s/g, '').length) throw "Must enter comment"
   const createdComment = await commentData.create(postId, userId, body);
   res.status(200).json({ comment: createdComment });
+  }catch(e){
+    return res.render("users/forum", { error: e });
+  }
 });
 
 router.post("/add/like", async (req, res) => {

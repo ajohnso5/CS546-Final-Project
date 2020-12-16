@@ -68,6 +68,14 @@ router.post("/findfish", async (req, res) => {
       waveHeight,
       targetFish,
     } = req.body;
+
+    if(!temp.replace(/\s/g, '').length) throw "Must enter temperature"
+    if(!windspeed.replace(/\s/g, '').length) throw "Must enter windspeed"
+    if(!weatherCondition.replace(/\s/g, '').length) throw "Must enter weather condition"
+    if(!tide.replace(/\s/g, '').length) throw "Must enter tide"
+    if(!waveHeight.replace(/\s/g, '').length) throw "Must enter wave height"
+    if(!targetFish.replace(/\s/g, '').length) throw "Must enter a target fish"
+
     const sessions = await sessionData.getForUser(userId);
     let bestSession = {};
     let highestScore = -1;
@@ -100,7 +108,12 @@ router.get("/forum", async (req, res) => {
 
 router.post("/forum", async (req, res) => {
   //this creates the post and adds it to the post collection
+  try{
   const { title, caption } = req.body;
+
+  if(!title.replace(/\s/g, '').length) throw "Must enter a title"
+  if(!caption.replace(/\s/g, '').length) throw "Must enter a caption"
+
   const post = await postData.create(
     xss(title),
     xss(req.session.user.userId),
@@ -111,6 +124,10 @@ router.post("/forum", async (req, res) => {
   //this gets the current username of the person who postes
   const user = await userData.getById(req.session.user.userId);
   return res.json({ username: user.username, post }); // returns object of data
+  }catch(e){
+    console.log(e)
+    return res.render("users/forum", { error: e });
+  }
 });
 
 router.post("/posts", async (req, res) => {
