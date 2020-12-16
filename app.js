@@ -42,6 +42,16 @@ app.use('/dashboard', (req, res, next) => {
 
 });
 
+app.use('/action', (req, res, next) => {
+  if (!req.session.user) {
+    req.session.error = 'You are not logged in';
+    return res.redirect('/');
+  } else {
+    next();
+  }
+
+});
+
 
 configRoutes(app);
 

@@ -28,11 +28,16 @@ router.get('/', async (req,res) => {
 
 router.post('/createAccount', async (req,res)=>{
   try{
+      if(!req.body.username.replace(/\s/g, '').length) throw "Must enter a username"
+      if(!req.body.password.replace(/\s/g, '').length) throw "Must enter a password"
+
       if(req.body.password != req.body.repass) throw "Passwords do not match"
      // hashed = await bcrypt.hash(req.body.password, 12);
       const newUser = await userData.register(req.body.username, req.body.password, req.body.repass)
+      const user = await userData.getUserByName(req.body.username)
 
-      req.session.user = {  id: newUser._id, username: req.body.username };
+
+      req.session.user = {  id: user._id, username: req.body.username };
       return res.redirect("/dashboard")
     }catch(e){
     res.status(401).render('users/index',{error: e });
@@ -42,10 +47,11 @@ router.post('/createAccount', async (req,res)=>{
 
 router.post('/login', async (req, res) => {
 	try{
+    if(!req.body.username.replace(/\s/g, '').length) throw "Must enter a username"
+    if(!req.body.password.replace(/\s/g, '').length) throw "Must enter a password"
 
     const login = await userData.login(req.body.username,req.body.password)
-
-
+  
     if(!login)throw "username or password is incorrect"
     const user = await userData.getUserByName(req.body.username)
 
