@@ -32,7 +32,7 @@ async function update(id, model) {
     return await helper.update(tides, id, updates, "Tide");
 }
 
-model.exports = {
+module.exports = {
     create,
     remove, 
     getById,

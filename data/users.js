@@ -15,20 +15,10 @@ async function login(username, password) {
 async function register(username, password, repass) {
     utils.checkParams(utils.checkString, {username, password, repass});
     if (repass !== password) throw "Passwords do not match";
-    await checkUserNameNotExist(username);
     await checkPassword(password);
-    const usersCollection = await users();
 
-    const result = await usersCollection.insertOne({
-        isAuthorized: false,
-        username: username,
-        passwordHash: await hashpw(password),
-        postsArray: [],
-        sessionArray: []
-    });
-
-    if (result.insertedCount === 0) throw "Could not register new user";
-    return getById(result.insertedId.toString())
+    // register is a special version of create() that only creates users that do not have admin privileges.
+    return await create(username, password, false);
 }
 
 
@@ -36,16 +26,27 @@ async function register(username, password, repass) {
 async function create(username, password, isAuthorized) {
     utils.checkParams(utils.checkString, {username, password});
     utils.checkParams(utils.checkBool, {isAuthorized});
-    checkUserNameNotExist(username);
-    checkPassword(password);
+    await checkUserNameNotExist(username);
+    await checkPassword(password);
     const pwHash = await hashpw(password);
-    return await helper.create(users, {isAuthorized, username, password: pwHash}, "User");
+    const usersCollection = await users();
+    
+    let newUser = {
+        isAuthorized: isAuthorized,
+        username: username,
+        passwordHash: await hashpw(password),
+        postsArray: [],
+        sessionArray: []
+    }
+
+    return await helper.create(users, newUser, 'User');
 }
 
 async function remove(id) {
     return await helper.remove(users, id, "User");
 }
 
+// Generalized helper function to get any object from chosen collection
 async function getById(id) {
     return await helper.getById(users, id, "User");
 }

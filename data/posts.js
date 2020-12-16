@@ -12,7 +12,20 @@ async function create(title, userId, body) {
     await utils.checkParams(utils.checkStringIsObjectId, {userId});
     await utils.checkParams(utils.checkString, {title, body});
     await utils.checkExist(users, {_id: utils.toObjectId(userId)}, "User");
-    const myPost = await helper.create(posts, {title, userId, body, commentsArray:[], likes:[], dislikes:[], reports:[], date: utils.getDate()}, "Post");
+
+    // const imageFile = `/public/images/${title}_${userId}_${Date.now()}`;
+    // fs.writeFileSync(imagePath, imageFile);
+    commentsArray = []
+    const newPost = {
+        title: title,
+        userId: userId,
+        body: body,
+        imagePath: imagePath,
+        commentsArray: commentsArray
+    }
+
+
+    const myPost = await helper.create(posts, newPost, "Post");
     const usersCollection = await users();
     usersCollection.updateOne({_id: utils.toObjectId(userId)},{$addToSet:{postsArray: myPost._id}})
     return myPost;

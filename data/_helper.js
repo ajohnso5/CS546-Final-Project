@@ -1,10 +1,15 @@
 const utils = require('./_utils');
 
-async function create(collection, params, objName) {
+// Schema:
+// collection: collection function being passed into this general helper function
+// newObj: object initialized in the outer function passed into helper function
+// objName: name of instances in collection being added to
+// Returns: newly added object
+async function create(collection, newObj, objName) {
     const col = await collection();
-    const result = await col.insertOne(params);
-    if (result.insertedCount === 0) throw `Could not create ${objName}`;
-    return await getById(collection, result.insertedId.toString(), objName); 
+    const result = await col.insertOne(newObj);
+    if (result.insertedCount === 0) throw `Could not create new ${objName}`;
+    return await getById(collection, result.insertedId, objName); 
 }
 
 async function remove(collection, id, objName) {
@@ -23,6 +28,7 @@ async function getById(collection, id, objName) {
     return result;
 }
 
+// NOT CURRENTLY FUNCTIONAL
 async function getAll(collection) {
     const col = await collection();
     return await col.find({}).toArray();
