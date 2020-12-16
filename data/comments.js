@@ -4,13 +4,14 @@ const mongoCollections = require('../config/mongoCollections');
 const comments = mongoCollections.comments;
 const users = mongoCollections.users;
 const posts = mongoCollections.posts;
+const userData = require("./users");
 
 async function create(postId, userId, body) {
     utils.checkParams(utils.checkStringIsObjectId, {postId, userId});
     utils.checkParams(utils.checkString, {body});
     utils.checkExist(users, {_id: utils.toObjectId(userId)}, "User");
     utils.checkExist(posts, {_id: utils.toObjectId(postId)}, "Post");
-    const comment = await helper.create(comments, {postId, userId, body}, "Comment")
+    const comment = await helper.create(comments, {postId, userId, body, date: utils.getDate()}, "Comment")
     const postsCollection = await posts();
     const updated = await postsCollection.updateOne({_id: utils.toObjectId(postId)},{$addToSet:{commentsArray: comment._id}})
     return comment;
@@ -32,7 +33,11 @@ async function getAll() {
 async function getCommentsForPostId(postId) {
     const post = await helper.getById(posts, postId, "Post");
     const commentCollection = await comments();
-    const foundComments = await commentCollection.find({postId: post._id}).toArray();
+    const foundComments = await commentCollection.find({postId: postId}).toArray();
+    for (let i=0; i<foundComments.length; i++) {
+        foundComments[i].user = await userData.getById(foundComments[i].userId);
+    }
+    console.log("Found comments:", foundComments);
     return utils.sortByDate(foundComments);
 }
 

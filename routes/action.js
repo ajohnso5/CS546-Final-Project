@@ -121,5 +121,10 @@ router.post("/remove/report", async (req, res) => {
   res.status(200).json({ message: "Removed report successfully" });
 });
 
+router.get("/comments/:id", async (req, res) => {
+  const postId = req.params.id;
+  const foundComments = await commentData.getCommentsForPostId(postId);
+  res.status(200).json({comments: foundComments});
+});
 
 module.exports = router;
