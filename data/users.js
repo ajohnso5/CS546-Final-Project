@@ -28,9 +28,14 @@ async function register(username, password, repass) {
         postsArray: [],
         sessionArray: []
     });
+    // console.log(result);
+    // console.log(utils.stringifyObject(result));
 
     if (result.insertedCount === 0) throw "Could not register new user";
-    return getById(result.insertedId.toString())
+    // console.log(result.insertedId);
+    // const test = await getById(result.insertedId);
+    // console.log(JSON.stringify(test));
+    return await getById(result.insertedId);
 }
 
 
@@ -38,8 +43,8 @@ async function register(username, password, repass) {
 async function create(username, password, isAuthorized) {
     utils.checkParams(utils.checkString, {username, password});
     utils.checkParams(utils.checkBool, {isAuthorized});
-    checkUserNameNotExist(username);
-    checkPassword(password);
+    await checkUserNameNotExist(username);
+    await checkPassword(password);
     const pwHash = await hashpw(password);
     return await helper.create(users, {isAuthorized, username, password: pwHash}, "User");
 }
@@ -51,6 +56,14 @@ async function remove(id) {
 async function getById(id) {
     return await helper.getById(users, id, "User");
 }
+
+// lecture code that when swapped in that makes getById() not return null
+// async function getUserById(id) {
+//     const userCollection = await users();
+//     const user = await userCollection.findOne({ _id: id });
+//     if (!user) throw 'User not found';
+//     return user;
+//   }
 
 async function getAll() {
     return await helper.getAll(users);

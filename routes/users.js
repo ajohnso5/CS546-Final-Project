@@ -65,7 +65,7 @@ router.get('/logout', async (req, res) => {
 });
 
 router.get('/mysessions', async (req, res) => {
-  const sessions = await sessionData.getForUser(req.session.userId);
+  const sessions = await sessionData.getForUser(req.session.user.userId);
   res.status(200).render('users/sessions', {sessions});
 });
 
