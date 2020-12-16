@@ -1,18 +1,20 @@
 <div id="main-page">
     <div id="login_container">
-        {{#if error}}
-        <h1 id="error"> {{{error}}} </h2>
-            {{else}}
-            {{/if}}
-            <form action="/login" method="POST" id="myForm">
+        <h1 id="error"> {{#if error}}
+            {{{error}}} {{/if}}
+            </h2>
+            <form action="login" method="POST" id="loginForm">
                 <h1>FishFinder</h1>
                 <h2 id="subtitle">Login</h2>
                 <input type="text" id="username" name="username" placeholder="Username">
                 <input type="password" id="password" name="password" placeholder="Password">
                 <div id="hidden"></div>
-                <button type="submit">Go!</button>
+                <button type="submit" name="loginSubmit">Go!</button>
                 <span onclick="changeScreen()" id="change-screen">Don't have an account? Click here!</span>
             </form>
+    </div>
+    <div id="scripts">
+    <script type="text/javascript" src="/public/error_checking/error_checking_login.js"></script>
     </div>
     <script type="text/javascript" src="/public/login.js"></script>
 </div>

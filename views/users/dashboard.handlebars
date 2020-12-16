@@ -8,24 +8,24 @@
     </ul>
 </nav>
 <h1>Find Fish</h1>
-<form method="POST" action="/dashboard/findfish">
+<form method="POST" action="/dashboard/findfish" id="findFishForm">
     <h3>Enter today's conditions...</h3>
-    <input type="text" placeholder="Tempature" name="temp">
-    <input type="text" placeholder="Wind Speed" name="windspeed">
+    <input type="number" id="temp" placeholder="Tempature" name="temp">
+    <input type="number" placeholder="Wind Speed" name="windspeed" id="windspeed">
     <select name="weatherCondition">
         <option value="sunny">Sunny</option>
         <option value="pc">Partly Cloudy</option>
         <option value="cloudy">Cloudy</option>
         <option value="rain">Rainy</option>
     </select>
-    <input type="text" placeholder="Tide" name="tide">
-    <input type="wave-height" placeholder="Wave Height" name="waveHeight">
-    <input type="targetfish" placeholder="Targeted Fish" name="targetFish">
-    <button type="submit" name="submit">Find me fish!</button>
+    <input type="text" placeholder="Tide" name="tide" id="tide">
+    <input type="number" placeholder="Wave Height" id="waveHeight" name="waveHeight">
+    <input type="text" placeholder="Targeted Fish" id="targetFish" name="targetFish">
+    <button type="submit" name="submitFish">Find me fish!</button>
 </form>
-{{#if error}}
-<p>Error: {{error}}</p>
-{{/if}}
+<p id="error">{{#if error}}
+    Error: {{error}}{{/if}}
+</p>
 {{#if session}}
 <div class="journal_container">
     <h1>Most Similar Session</h1>
@@ -39,10 +39,12 @@
                 <p>Fish Types: {{session.fish.fishTypeId}}</p>
                 <p>Weather: {{session.weather.condition}}, {{session.weather.temp}}&deg;F</p>
                 <p>Wind Speed: {{session.weather.wind_speed}}</p>
-                <p>Ocean Conditions: {{session.water_conditions.tide}} Tide, {{session.water_conditions.waveheight}}ft Waves</p>
+                <p>Ocean Conditions: {{session.water_conditions.tide}} Tide, {{session.water_conditions.waveheight}}ft
+                    Waves</p>
                 <p>Notable Catches: {{session.notableCatches}}</p>
             </div>
         </li>
     </ul>
 </div>
 {{/if}}
+<script type="text/javascript" src="/public/error_checking/error_checking_dashboard.js"></script>

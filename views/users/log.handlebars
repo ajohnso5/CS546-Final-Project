@@ -11,31 +11,32 @@
 {{#if created}}
 <p>Session Logged!</p>
 {{/if}}
-{{#if error}}
-<p>Error creating session: {{error}}</p>
-{{/if}}
-<form method="POST" action="/action/session">
+
+<p id="error">{{#if error}}Error creating session: {{error}}{{/if}}</p>
+
+<form method="POST" action="/action/session" id="logForm">
     <h3>Enter session conditions...</h3>
     <label for="isPublic">Public</label>
-    <input type="checkbox" name="isPublic" >
-    <input type="text" placeholder="Town and State (E.g Spring Lake NJ)" name="loc">
-    <input type="date" name="date">
-    <input type="number" name="durationHours" placeholder="Hours Spent">
+    <input type="checkbox" name="isPublic">
+    <input type="text" id="loc" placeholder="Town and State (E.g Spring Lake NJ)" name="loc">
+    <input type="date" name="date" value="2020-12-12">
+    <input type="number" id="duration" name="durationHours" placeholder="Hours Spent">
     <label for="tide">Tide</label>
     <select name="tide">
         <option value="High">High</option>
         <option value="Low">Low</option>
-        <option value="Slack">Slack</option>    
+        <option value="Slack">Slack</option>
     </select>
-    <input type="number" placeholder="Avg Wave Height (Feet)" name="waveheight">
-    <input type="text" placeholder="Type of Fish Caught" name="fishTypeId">
-    <input type="text" placeholder="Lures" name="lures">
-    <input type="number" placeholder="Quantity" name="quantity">
-    <input type="number" placeholder="Average Length (Inches)" name="avgLength">
-    <input type="number" placeholder="Longest Catch (Inches)" name="maxLength">
-    <input type="number" placeholder="Average Weight (lbs)" name="avgWeight">
-    <input type="number" placeholder="Max Weight (lbs)" name="maxWeight">
-    <input type="text" placeholder="Notable Catches" name="notableCatches">
-    <input type="text" placeholder="Notes" name="note">
-    <button type="submit" name="submit">Log Catches!</button>
+    <input type="number" id="waveHeight" placeholder="Avg Wave Height (Feet)" name="waveheight">
+    <input type="text" id="fishCaught" placeholder="Type of Fish Caught" name="fishTypeId">
+    <input type="text" id="lures" placeholder="Lures" name="lures">
+    <input type="number" id="quantity" placeholder="Quantity" name="quantity">
+    <input type="number" id="avgLength" placeholder="Average Length (Inches)" name="avgLength">
+    <input type="number" id="maxLength" placeholder="Longest Catch (Inches)" name="maxLength">
+    <input type="number" id="avgWeight" placeholder="Average Weight (lbs)" name="avgWeight">
+    <input type="number" id="maxWeight" placeholder="Max Weight (lbs)" name="maxWeight">
+    <input type="text" id="notables" placeholder="Notable Catches" name="notableCatches">
+    <input type="text" id="notes" placeholder="Notes" name="note">
+    <button type="submit" name="submitLog">Log Catches!</button>
 </form>
+<script type="text/javascript" src="/public/error_checking/error_checking_log.js"></script>
