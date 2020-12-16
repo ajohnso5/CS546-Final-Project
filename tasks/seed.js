@@ -30,16 +30,14 @@ const main = async () => {
   const firstPost = await posts.create(
     'Caught a big one',
     matthew._id,
-    'The weather outside was beautiful, had a really nice day out by the lake!\nDefinitely wish I could have had some friends here with me, but it\'s not really possible right now.',
-    'https://fyrnelake.com/uploads/3/4/8/0/34804321/published/wil_2.jpg?1559850795'
-  );
+    'The weather outside was beautiful, had a really nice day out by the lake!\nDefinitely wish I could have had some friends here with me, but it\'s not really possible right now.'
+  ).catch();
 
   const secondPost = await posts.create(
     'No luck today',
     alex._id,
-    'Spent 4 hours out here, was some great weather but I never got any bites. Better luck next time!',
-    'https://fyrnelake.com/uploads/3/4/8/0/34804321/published/wil_2.jpg?1559850795'
-  )
+    'Spent 4 hours out here, was some great weather but I never got any bites. Better luck next time!'
+  ).catch();
 
 
   // Begin seeding comments
@@ -49,13 +47,13 @@ const main = async () => {
     firstPost._id,
     chris._id,
     'Looks like a great time!'
-  );
+  ).catch();
 
   const secondComment = await comments.create(
     firstPost._id,
     ryan._id,
     'wish i could have been there'
-  )
+  ).catch();
 
   // Populate supported fish types into the database
   console.log('seeding fish types...');
@@ -63,7 +61,7 @@ const main = async () => {
   const fishArr = ['Bass', 'Mackerel', 'Blue Fish', 'Tog', 'Winter Flouder', 'Fluke', 'Sunfish', 'Ray', 'Shark'];
   
   for (let i = 0; i < 9; i++) {
-    fishTypes.create(fishArr[i]);
+    await fishTypes.create(fishArr[i]);
   }
   console.log(fishArr);
   console.log(await fishTypes.getAll());
@@ -71,9 +69,9 @@ const main = async () => {
   // Populate supported tides into the database
   console.log('seeding tides...');
 
-  tides.create('high');
-  tides.create('low');
-  tides.create('medium');
+  await tides.create('high');
+  await tides.create('low');
+  await tides.create('medium');
 
 
   // // Seed sessions into the database

@@ -20,7 +20,6 @@ async function create(title, userId, body) {
         title: title,
         userId: userId,
         body: body,
-        imagePath: imagePath,
         commentsArray: commentsArray
     }
 
