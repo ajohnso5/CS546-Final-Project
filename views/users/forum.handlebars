@@ -1,7 +1,6 @@
 <nav>
     <ul>
         <li><a href="/dashboard/journal" action>Journal</a></li>
-        <li><a href="/dashboard/data" action>Data</a></li>
         <li><a href="/dashboard">Find Fish!</a></li>
         <li><a href="/dashboard/log">Log</a></li>
         <li><a class="selected" href="/dashboard/forum">Forum</a></li>
@@ -10,6 +9,9 @@
 </nav>
 
 <div id="forum-container">
+{{#if error}}
+<p>Error: {{error}}</p>
+{{/if}}
     <h1>Forum</h1>
 
 <!-- temporary forum post skeleton -->
