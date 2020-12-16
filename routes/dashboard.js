@@ -22,6 +22,13 @@ router.get("/journal", async (req, res) => {
   return res.render("users/journal", { sessions: d.reverse() });
 });
 
+// get all the posts for forum
+router.get("/posts", async (req, res) => {
+	const posts = await postData.getAllNonLazy();
+	return res.status(200).json(posts);
+});
+
+
 router.get("/findfish", async (req, res) => {
   return res.render("users/dashboard");
 });
@@ -31,25 +38,22 @@ router.get("/log", async (req, res) => {
 });
 
 router.get("/forum", async (req, res) => {
-  // const posts = await postData.getAll();
-  // for (let i=0; i<posts.length; i++) {
-  // 	posts[i].comments = commentData.getCommentsForPostId(posts[i].id);
-  // }
   return res.render("users/forum");
 });
 
 router.post("/forum", async (req, res) => {
   //this creates the post and adds it to the post collection
+  const {title, caption} = req.body;
   const post = await postData.create(
-    req.body.title,
-    req.session.user.id,
-    req.body.caption,
-    req.body.image
+    title,
+    req.session.user.userId,
+    caption,
+    null
   );
 
   //this gets the current username of the person who postes
-  const user = await userData.getById(req.session.user.id);
-  return res.json({ username: user.username, thePost: post }); // returns object of data
+  const user = await userData.getById(req.session.user.userId);
+  return res.json({ username: user.username, post }); // returns object of data
 });
 
 router.post("/posts", async (req, res) => {

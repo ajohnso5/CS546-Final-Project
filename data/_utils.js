@@ -1,5 +1,28 @@
 const { ObjectId } = require("mongodb");
 
+function getDate() {
+    const current = new Date();
+    const day = current.getDate();
+    const month = current.getMonth();
+    const year = current.getFullYear();
+    const hour = current.getHours();
+    const min = current.getMinutes();
+    const sec = current.getSeconds();
+    const ms = current.getMilliseconds();
+    return `${year}-${month}-${day}::${hour}:${min}:${sec}:${ms}`;
+}
+
+function compareDates(a, b) {
+    if (a.date < b.date) return 1;
+    if (a.date > b.date) return -1;
+    return 0;
+}
+
+function sortByDate(array) {
+    return array.sort(compareDates);
+}
+
+
 function checkParams(fn, params) {
     const keys = Object.keys(params);
     for (let i=0; i<keys.length; i++) {
@@ -81,5 +104,7 @@ module.exports = {
     checkExist,
     checkStringArray,
     checkFloat,
-    checkDateTime
+    checkDateTime,
+    getDate,
+    sortByDate
 }

@@ -25,14 +25,15 @@ async function getById(id) {
 }
 
 async function getAll() {
-    return await helper.getAll(comments);
+    const allComments = await helper.getAll(comments);
+    return utils.sortByDate(allComments);
 }
 
 async function getCommentsForPostId(postId) {
     const post = await helper.getById(posts, postId, "Post");
     const commentCollection = await comments();
-    const comments = await commentCollection.findMany({postId: post._id});
-    return utils.stringifyObject(comments)
+    const foundComments = await commentCollection.find({postId: post._id}).toArray();
+    return utils.sortByDate(foundComments);
 }
 
 async function update(id, model) {

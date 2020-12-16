@@ -82,10 +82,44 @@ router.post("/session", async (req, res) => {
 
 router.post("/comment", async (req, res) => {
   //This will upload to website database and update the homepage of what users can see.
-  const userId = req.session.userId;
+  const userId = req.session.user.userId;
   const { postId, body } = req.body;
   const createdComment = await commentData.create(postId, userId, body);
   res.status(200).json({ comment: createdComment });
 });
+
+router.post("/add/like", async (req, res) => {
+  await postData.addLike(req.body.postId, req.session.user.userId);
+  res.status(200).json({ message: "Added like successfully" });
+});
+
+
+router.post("/add/dislike", async (req, res) => {
+  await postData.addDislike(req.body.postId, req.session.user.userId);
+  res.status(200).json({ message: "Added dislike successfully" });
+});
+
+router.post("/add/report", async (req, res) => {
+  await postData.addReport(req.body.postId, req.session.user.userId);
+  res.status(200).json({ message: "Added report successfully" });
+});
+
+
+router.post("/remove/like", async (req, res) => {
+  await postData.removeLike(req.body.postId, req.session.user.userId);
+  res.status(200).json({ message: "Removed like successfully" });
+});
+
+
+router.post("/remove/dislike", async (req, res) => {
+  await postData.removeDislike(req.body.postId, req.session.user.userId);
+  res.status(200).json({ message: "Removed dislike successfully" });
+});
+
+router.post("/remove/report", async (req, res) => {
+  await postData.removeReport(req.body.postId, req.session.user.userId);
+  res.status(200).json({ message: "Removed report successfully" });
+});
+
 
 module.exports = router;
