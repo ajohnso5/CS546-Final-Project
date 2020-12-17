@@ -75,7 +75,6 @@ const main = async () => {
     fishTypes.create(fishArr[i]);
   }
   console.log(fishArr);
-  console.log(await fishTypes.getAll());
 
   // Populate supported tides into the database
   console.log("seeding tides...");
@@ -90,15 +89,9 @@ const main = async () => {
   // NOTES: Should make form for selecting fishTypes simply be a dropdown that lets users select from all fishTypes, and returns the id of those fishTypes
   // NOTES pt 2: Tides are accepting string even though tides are stored in an object like fishTypes. Different implementation of similar concept.
 
-  // new Date(Year, month-1, day, hours)
-  // Nov 24, 2020, 1pm
   const firstDate = "2020-12-12";
-
   const firstLoc = "Belmar NJ";
-  // NEED TO FIGURE OUT LOCATION OBJECT TO PASS INTO WEATHER API.
-  // USAGE IS getWeather(date, loc), need to make sure location object is the right type.
-  // Date object should be correct.
-  const firstSession = await sessions.create(
+  const session1 = await sessions.create(
     matthew._id.toString(),
     "on",
     firstLoc,
@@ -117,15 +110,14 @@ const main = async () => {
     "3"
   );
 
-  console.log(firstSession);
+  console.log(session1);
 
   const firstDate2 = "2020-12-13";
-
   const firstLoc2 = "Hoboken NJ";
   // NEED TO FIGURE OUT LOCATION OBJECT TO PASS INTO WEATHER API.
   // USAGE IS getWeather(date, loc), need to make sure location object is the right type.
   // Date object should be correct.
-  const firstSession2 = await sessions.create(
+  const session2 = await sessions.create(
     matthew._id.toString(),
     "on",
     firstLoc2,
@@ -144,15 +136,11 @@ const main = async () => {
     "3"
   );
 
-  console.log(firstSession2);
+  console.log(session2);
 
   const firstDate3 = "2020-12-14";
-
   const firstLoc3 = "Asbury NJ";
-  // NEED TO FIGURE OUT LOCATION OBJECT TO PASS INTO WEATHER API.
-  // USAGE IS getWeather(date, loc), need to make sure location object is the right type.
-  // Date object should be correct.
-  const firstSession3 = await sessions.create(
+  const session3 = await sessions.create(
     alex._id.toString(),
     "on",
     firstLoc3,
@@ -171,7 +159,7 @@ const main = async () => {
     "3"
   );
 
-  console.log(firstSession3);
+  console.log(session3);
 
 
   console.log("Done seeding database");
