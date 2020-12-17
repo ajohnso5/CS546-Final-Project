@@ -48,7 +48,7 @@ async function create(
   notableCatches,
   quantity,
   tide,
-  waveheight
+  waveHeight
 ) {
   try {
     utils.checkParams(utils.checkString, {
@@ -67,7 +67,7 @@ async function create(
       avgWeight,
       maxLength,
       maxWeight,
-      waveheight,
+      waveHeight,
     });
     if (isPublic == "on") isPublic = true;
     else isPublic = false;
@@ -88,14 +88,14 @@ async function create(
         avgLength: parseFloat(avgLength),
         avgWeight: parseFloat(avgWeight),
         maxLength: parseFloat(maxLength),
-        maxWeight: parseFloat(maxWeight),
+        maxWeight: parseFloat(maxWeight)
       },
       weather: weatherData,
       water_conditions: {
         tide,
-        waveheight,
+        waveHeight
       },
-      notableCatches,
+      notableCatches
     };
     console.log(session);
     return await helper.create(sessions, session, "Session");
@@ -138,12 +138,12 @@ async function update(id, model) {
     updates.fish.lures = model.lures;
   }
   if (model.fishTypeId != null) {
-    utils.checkParams(utils.checkStringIsObjectId, {
+    utils.checkParams(utils.checkString, {
       fishTypeId: model.fishTypeId,
     });
     utils.checkExist(
       fishTypes,
-      { _id: utils.toObjectId(fishTypeId) },
+      { _name: fishTypeId },
       "FishType"
     );
     updates.fish.fishTypeId = model.fishTypeId;
