@@ -23,8 +23,6 @@ async function getWeather(date, loc) {
 
 async function getForUser(userId) {
   utils.checkParams(utils.checkStringIsObjectId, { userId });
-  const d = await getAll();
-  console.log(d);
   const sessionsData = await sessions();
   const userSessions = await sessionsData.find({
     userId: userId,
