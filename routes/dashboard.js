@@ -19,11 +19,13 @@ router.get("/journal", async (req, res) => {
   const d = await sessionData.getForUser(req.session.user.userId);
   const u = await userData.getById(req.session.user.userId);
   const username = u.username;
-  return res.render("users/journal", { sessions: d.reverse(), name: username });
+  const showDelete = true;
+  return res.render("users/journal", { sessions: d.reverse(), name: username, showDelete: 'showDelete'});
 });
 
 router.get("/journal/:id", async (req, res) => {
   const id = req.params.id;
+  const showDelete = true;
   let checkForPub = true;
   if (req.session.user.userId == id) {
     checkForPub = false;
@@ -44,6 +46,7 @@ router.get("/journal/:id", async (req, res) => {
     return res.render("users/journal", {
       sessions: d.reverse(),
       name: username,
+      showDelete: 'showDelete'
     });
 });
 

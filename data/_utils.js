@@ -3,7 +3,7 @@ const { ObjectId } = require("mongodb");
 function getDate() {
     const current = new Date();
     const day = current.getDate();
-    const month = current.getMonth();
+    const month = current.getMonth() + 1;
     const year = current.getFullYear();
     const hour = current.getHours();
     const min = current.getMinutes();

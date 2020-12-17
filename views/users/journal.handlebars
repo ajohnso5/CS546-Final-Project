@@ -22,9 +22,11 @@
                 <p>Wind Speed: {{weather.wind_speed}}</p>
                 <p>Ocean Conditions: {{water_conditions.tide}} Tide, {{water_conditions.waveheight}}ft Waves</p>
                 <p>Notable Catches: {{notableCatches}}</p>
+                {{#if ../showDelete}}
                 <form action="/action/delete/{{_id}}" method="POST">
                     <button type="submit">Delete</button>
                 </form>
+                {{/if}}
             </div>
         </li>
         {{/each}}
