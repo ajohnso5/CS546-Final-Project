@@ -54,7 +54,6 @@ router.post("/session", async (req, res) => {
     tide,
     waveheight,
   } = req.body;
-
   if(!loc.replace(/\s/g, '').length) throw "Town and State can not be empty"
   if(!date.replace(/\s/g, '').length) throw "Date can not be empty"
   if(!durationHours.replace(/\s/g, '').length) throw "Hours Spent can not be empty"

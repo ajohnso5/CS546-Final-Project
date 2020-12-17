@@ -2,7 +2,7 @@
   const loginForm = document.getElementById("loginForm");
   const error = document.getElementById("error");
   const username = document.getElementById("username");
-  const password = document.getElementById("password");
+  const password = document.getElementById("password");  
   const state = document.getElementById("subtitle");
 
   if (loginForm) {
@@ -17,9 +17,8 @@
         }
       } else {
         if (
-          username.trim().value == "" ||
-          password.trim().value == "" ||
-          repass.trim().value == ""
+          username.value.trim() == "" ||
+          password.value.trim() == ""
         ) {
           error.innerText = "Username or Password cannot be blank";
           return;
