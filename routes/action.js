@@ -6,6 +6,7 @@ const sessionData = require(__dirname + "/../data/sessions");
 const postData = require(__dirname + "/../data/posts");
 const multer = require("multer");
 const upload = multer({ dest: "../public/images/" });
+const xss = require('xss');
 
 // Use client-side js to dynamically load posted content after post
 
@@ -104,7 +105,7 @@ router.post("/comment", async (req, res) => {
   const userId = req.session.user.userId;
   const { postId, body } = req.body;
   if(!body.replace(/\s/g, '').length) throw "Must enter comment"
-  const createdComment = await commentData.create(postId, userId, body);
+  const createdComment = await commentData.create(xss(postId), xss(userId), xss(body));
   res.status(200).json({ comment: createdComment });
   }catch(e){
     return res.render("users/forum", { error: e });
