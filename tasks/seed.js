@@ -27,34 +27,46 @@ const main = async () => {
   // Begin seeding posts
   console.log("seeding posts...");
 
-  const firstPost = await posts.create(
+  const post1 = await posts.create(
     "Caught a big one",
     matthew._id,
-    "The weather outside was beautiful, had a really nice day out by the lake!\nDefinitely wish I could have had some friends here with me, but it's not really possible right now.",
-    "https://fyrnelake.com/uploads/3/4/8/0/34804321/published/wil_2.jpg?1559850795"
+    "The weather outside was beautiful, had a really nice day out by the lake!\nDefinitely wish I could have had some friends here with me, but it's not really possible right now."
   );
 
-  const secondPost = await posts.create(
+  const post2 = await posts.create(
     "No luck today",
     alex._id,
-    "Spent 4 hours out here, was some great weather but I never got any bites. Better luck next time!",
-    "https://fyrnelake.com/uploads/3/4/8/0/34804321/published/wil_2.jpg?1559850795"
+    "Spent 4 hours out here, was some great weather but I never got any bites. Better luck next time!"
   );
+
+  const post3 = await posts.create(
+    "Fishing is the best",
+    ryan._id,
+    "Nothin like a sunny day and a cooler full of fish"
+  )
+
 
   // Begin seeding comments
   console.log("seeding comments...");
 
-  const firstComment = await comments.create(
-    firstPost._id,
+  const comment1 = await comments.create(
+    post1._id.toString(),
     chris._id,
     "Looks like a great time!"
   );
 
-  const secondComment = await comments.create(
-    firstPost._id,
+  const comment2 = await comments.create(
+    post1._id.toString(),
     ryan._id,
     "wish i could have been there"
   );
+
+  const comment3 = await comments.create(
+    post3.id.toString(),
+    chris._id,
+    "It sure is!"
+  )
+
 
   // Populate supported fish types into the database
   console.log("seeding fish types...");
@@ -82,6 +94,7 @@ const main = async () => {
   await tides.create("high");
   await tides.create("low");
   await tides.create("medium");
+  await tides.create("slack");
 
   // Seed sessions into the database
   console.log("seeding sessions...");
@@ -114,9 +127,6 @@ const main = async () => {
 
   const firstDate2 = "2020-12-13";
   const firstLoc2 = "Hoboken NJ";
-  // NEED TO FIGURE OUT LOCATION OBJECT TO PASS INTO WEATHER API.
-  // USAGE IS getWeather(date, loc), need to make sure location object is the right type.
-  // Date object should be correct.
   const session2 = await sessions.create(
     matthew._id.toString(),
     "on",
@@ -161,6 +171,47 @@ const main = async () => {
 
   console.log(session3);
 
+  const date4 = "2020-11-28"
+  const loc4 = "Mahwah NJ";
+  const session4 = await sessions.create(
+    chris._id.toString(),
+    "on",
+    loc4,
+    date4,
+    "forgot my sandals",
+    "4",
+    "spinner",
+    "Mackerel",
+    "2.5",
+    "2.6",
+    "5",
+    "4.5",
+    "big sunny",
+    "10",
+    "low",
+    "2"
+  )
+
+  const date5 = "2020-12-04"
+  const loc5 = "Edgewater NJ";
+  const session5 = await sessions.create(
+    alex._id.toString(),
+    "on",
+    loc5,
+    date5,
+    "secret spot",
+    "6",
+    "plug",
+    "Bass",
+    "10",
+    "12",
+    "15",
+    "18",
+    "none",
+    "3",
+    "low",
+    "4"
+  )
 
   console.log("Done seeding database");
   await db.serverConfig.close();
