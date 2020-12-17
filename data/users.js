@@ -15,10 +15,20 @@ async function login(username, password) {
 async function register(username, password, repass) {
     utils.checkParams(utils.checkString, {username, password, repass});
     if (repass !== password) throw "Passwords do not match";
+    await checkUserNameNotExist(username);
     await checkPassword(password);
+    const usersCollection = await users();
 
-    // register is a special version of create() that only creates users that do not have admin privileges.
-    return await create(username, password, false);
+    const result = await usersCollection.insertOne({
+        isAuthorized: false,
+        username: username,
+        passwordHash: await hashpw(password),
+        postsArray: [],
+        sessionArray: []
+    });
+
+    if (result.insertedCount === 0) throw "Could not register new user";
+    return getById(result.insertedId.toString())
 }
 
 
@@ -29,6 +39,7 @@ async function create(username, password, isAuthorized) {
     await checkUserNameNotExist(username);
     await checkPassword(password);
     const pwHash = await hashpw(password);
+//    return await helper.create(users, {isAuthorized, username, password: pwHash}, "User");
     const usersCollection = await users();
     
     let newUser = {
